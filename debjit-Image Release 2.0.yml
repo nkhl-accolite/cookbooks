@@ -14,13 +14,15 @@ stages:
 
 - template: templates/debjit-stages.yml # Template reference
   parameters:
-    stageName: 'w12r2d142 Aus'
+    stageName: 'w12r2d142Aus'
+    stagedisplayName: 'w12r2d142 Aus'
     dependsOn: Build
     jobName: 'w12r2d142 Aus'
 
 - template: templates/debjit-stages.yml # Template reference
   parameters:
-    stageName: 'w12r2d150 Aus'
+    stageName: 'w12r2d150Aus'
+    stagedisplayName: 'w12r2d150 Aus'
     dependsOn: Build
     jobName: 'w12r2d150 Aus'
 
@@ -73,13 +75,15 @@ stages:
       
 - template: templates/debjit-stages.yml
   parameters:
-    stageName: 'w12r2d142 Aus East Preview'
+    stageName: 'w12r2d142AusEastPreview'
+    stagedisplayName: 'w12r2d142 Aus East Preview'
     dependsOn: 'Merge patch/paas cookbooks'
     jobName: 'w12r2d142 Aus East Preview'
 
 - template: templates/debjit-stages.yml
   parameters:
-    stageName: 'w12r2d142 US East Preview'
+    stageName: 'w12r2d142USEastPreview'
+    stagedisplayName: 'w12r2d142 US East Preview'
     dependsOn: 'Merge patch/paas cookbooks'
     jobName: 'w12r2d142 US East Preview'
 
@@ -162,12 +166,14 @@ stages:
 
 - template: templates/debjit-stages.yml
   parameters:
-    stageName: 'w12r2d142 US East Production'
+    stageName: 'w12r2d142USEastProduction'
+    stagedisplayName: 'w12r2d142 US East Production'
     dependsOn: 'Cookbooks Merge & Tag'
     jobName: 'w12r2d142 US East Production'
 
 - template: templates/debjit-stages.yml
   parameters:
-    stageName: 'w12r2d150 Asia East Production'
+    stageName: 'w12r2d150AsiaEastProduction'
+    stagedisplayName: 'w12r2d150 Asia East Production'
     dependsOn: 'Cookbooks Merge & Tag'
     jobName: 'w12r2d150 Asia East Production'

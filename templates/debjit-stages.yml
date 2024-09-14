@@ -2,6 +2,9 @@ parameters:
   - name: stageName
     type: string
     default: none
+  - name: stagedisplayName
+    type: string
+    default: none
   - name: dependsOn
     default: []
   - name: jobName
@@ -66,6 +69,7 @@ parameters:
 stages:
   - stage: ${{ parameters.stageName }}
     dependsOn: ${{ parameters.dependsOn }}
+    displayName: ${{ parameters.stagedisplayName }}
     jobs:
     - job: ${{ parameters.jobName }}
       pool: 
