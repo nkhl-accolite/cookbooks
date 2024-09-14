@@ -3,16 +3,14 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-2022'
 
 stages:
 - stage: Build
   jobs: 
   - job: npminstall
     steps:
-    - task: Npm@1
-      inputs:
-        command: 'install'
+    - pwsh: Write-Host "BUILD"
 
 - template: templates/debjit-stages.yml # Template reference
   parameters:
