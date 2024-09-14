@@ -1,0 +1,175 @@
+# File: azure-pipelines.yml
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  jobs: 
+  - job: npminstall
+    steps:
+    - task: Npm@1
+      inputs:
+        command: 'install'
+
+- stage: 'w12r2d142 Aus'
+  template: templates/debjit-stages.yml # Template reference
+  parameters:
+    dependsOn: Build
+    jobName: 'w12r2d142 Aus'
+
+- stage: 'w12r2d150 Aus'
+  template: templates/debjit-stages.yml # Template reference
+  parameters:
+    dependsOn: Build
+    jobName: 'w12r2d150 Aus'
+
+- stage: 'Publish Preview Images'
+  dependsOn: 
+    - 'w12r2d150 Aus'
+    - 'w12r2d142 Aus'
+  jobs: 
+  - job: 'Agentless job'
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Publish Preview Images'
+      inputs:
+        instructions: |
+          1. All preceding stages must be successful, or skipped
+          2. Publish the preview images in the marketplace
+          3. Wait for the email "Approve the offer preview for LANSA Scalable License"
+          4. Increment the Version number in the Image Build Pipeline
+          5. Increment the Test Version Preview Variable (TestVersionPrev<SKU>) in the "SKU Version" Variable Group.
+          6. Only now the pipeline may be continued to test the preview images
+
+- stage: 'Merge patch/paas cookbooks'
+  dependsOn: 'Agentless job'
+  jobs: 
+  - job: 'Merge patch/paas cookbooks'
+    steps:
+      #Your build pipeline references an undefined variable named ‘CookbooksBranchPreview’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitRobe070CookbooksPAT’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitRobe070CookbooksGitHubName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitUserEmail’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitUserName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘CookbooksSourceAlias’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      - task: PowerShell@2
+        displayName: 'Write access to Git Repo (robe070/cookbooks)'
+        inputs:
+          targetType: filePath
+          filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/GitRepoWriteAccess.ps1'
+          arguments: '-GitBranch ''$(CookbooksBranchPreview)'' -GitURL ''https://$(GitRobe070CookbooksPAT):x-oauth-basic@$(GitRobe070CookbooksGitHubName)'' -GitUserEmail ''$(GitUserEmail)'' -GitUserName ''$(GitUserName)'' -GitRepoName ''$(CookbooksSourceAlias)'''
+
+        #Your build pipeline references an undefined variable named ‘CookbooksSourceAlias’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+        #Your build pipeline references an undefined variable named ‘CookbooksBranch’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+        #Your build pipeline references an undefined variable named ‘CookbooksBranchPreview’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      - task: PowerShell@2
+        displayName: 'Merge robe070/cookbooks repo debug/paas to patch/paas'
+        inputs:
+          targetType: filePath
+          filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/GitMerge.ps1'
+          arguments: '-GitRepoName ''$(CookbooksSourceAlias)'' -GitSourceBranch ''$(CookbooksBranch)'' -GitTargetBranch ''$(CookbooksBranchPreview)'''
+      
+- stage: 'w12r2d142 Aus East Preview'
+  template: templates/debjit-stages.yml
+  parameters:
+    dependsOn: 'Merge patch/paas cookbooks'
+    jobName: 'w12r2d142 Aus East Preview'
+
+- stage: 'w12r2d142 US East Preview'
+  template: templates/debjit-stages.yml
+  parameters:
+    dependsOn: 'Merge patch/paas cookbooks'
+    jobName: 'w12r2d142 US East Preview'
+
+- stage: 'Go Live'
+  dependsOn: 
+    - 'w12r2d142 Aus East Preview'
+    - 'w12r2d142 US East Preview'
+  jobs: 
+  - job: 'Agentless job'
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Publish Preview Images'
+      inputs:
+        instructions: |
+          1. All preceding stages must be successful, or skipped
+          2. Publish the preview images in the marketplace
+          3. Wait for the email "Approve the offer preview for LANSA Scalable License"
+          4. Increment the Version number in the Image Build Pipeline
+          5. Increment the Test Version Preview Variable (TestVersionPrev<SKU>) in the "SKU Version" Variable Group.
+          6. Only now the pipeline may be continued to test the preview images
+
+- stage: 'Cookbooks Merge & Tag'
+  dependsOn: 'Go Live'
+  jobs: 
+  - job: 'Cookbooks Merge & Tag'
+    steps:
+    - task: PowerShell@2
+      displayName: 'Artifact Check - Set Gate Variable'
+      inputs:
+        targetType: filePath
+        filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
+        arguments: '-Version "w19d-15-0" -osName "Windows Server 2019"'
+
+      #Your build pipeline references an undefined variable named ‘Gate.IsEnabled’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘Gate.IsEnabled’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘Gate.IsEnabled’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘Gate.ImageUrl’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘Gate.Sku’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+    - powershell: |
+        # Print the Gate variables.
+        if ( $(Gate.IsEnabled) -eq 'True' ) {
+            Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
+        } 
+        
+      displayName: 'Artifact Check - Output Gate Variable'
+
+      #Your build pipeline references an undefined variable named ‘CookbooksBranchLive’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitRobe070CookbooksPAT’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitRobe070CookbooksGitHubName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitUserEmail’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘GitUserName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘CookbooksSourceAlias’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+    - task: PowerShell@2
+      displayName: 'Write access to Git Repo (robe070/cookbooks)'
+      inputs:
+        targetType: filePath
+        filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/GitRepoWriteAccess.ps1'
+        arguments: '-GitBranch ''$(CookbooksBranchLive)'' -GitURL ''https://$(GitRobe070CookbooksPAT):x-oauth-basic@$(GitRobe070CookbooksGitHubName)'' -GitUserEmail ''$(GitUserEmail)'' -GitUserName ''$(GitUserName)'' -GitRepoName ''$(CookbooksSourceAlias)'''
+
+      #Your build pipeline references an undefined variable named ‘CookbooksSourceAlias’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘CookbooksBranchPreview’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+      #Your build pipeline references an undefined variable named ‘CookbooksBranchLive’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+    - task: PowerShell@2
+      displayName: 'Merge robe070/cookbooks repo patch/paas to support/scalable'
+      inputs:
+        targetType: filePath
+        filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/GitMerge.ps1'
+        arguments: '-GitRepoName ''$(CookbooksSourceAlias)'' -GitSourceBranch ''$(CookbooksBranchPreview)'' -GitTargetBranch ''$(CookbooksBranchLive)'''
+
+    #Your build pipeline references an undefined variable named ‘CookbooksSourceAlias’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+    #Your build pipeline references an undefined variable named ‘Gate.Sku’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+    - task: PowerShell@2
+      displayName: 'Tag robe070/cookbooks repo '
+      inputs:
+        targetType: filePath
+        filePath: './$(System.DefaultWorkingDirectory)/_robe070_cookbooks/scripts/GitTag.ps1'
+        arguments: '-GitRepoName ''$(CookbooksSourceAlias)'' -Tags  ''AzureImage-Bld-$(Build.BuildId)-$(Release.ReleaseName)-$(Gate.Sku)'''
+
+- stage: 'w12r2d142 US East Production'
+  template: templates/debjit-stages.yml
+  parameters:
+    dependsOn: 'Cookbooks Merge & Tag'
+    jobName: 'w12r2d142 US East Production'
+
+- stage: 'w12r2d150 Asia East Production'
+  template: templates/debjit-stages.yml
+  parameters:
+    dependsOn: 'Cookbooks Merge & Tag'
+    jobName: 'w12r2d150 Asia East Production'
