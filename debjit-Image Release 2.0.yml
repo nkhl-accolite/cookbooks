@@ -29,10 +29,11 @@ stages:
 - stage: 'PublishPreviewImages'
   displayName: 'Publish Preview Images'
   dependsOn: 
-    - 'w12r2d150 Aus'
-    - 'w12r2d142 Aus'
+    - 'w12r2d150Aus'
+    - 'w12r2d142Aus'
   jobs: 
-  - job: 'Agentless job'
+  - job: 'AgentlessJob'
+    displayName: 'Agentless job'
     pool: server
     steps:
     - task: ManualIntervention@8
@@ -48,9 +49,10 @@ stages:
 
 - stage: 'MergePatch_PAASCookbooks'
   displayName: 'Merge patch/paas cookbooks'
-  dependsOn: 'Agentless job'
+  dependsOn: 'AgentlessJob'
   jobs: 
-  - job: 'Merge patch/paas cookbooks'
+  - job: 'MergePatch_PAASCookbooks'
+    displayName: 'Merge patch/PAAS cookbooks'
     steps:
       #Your build pipeline references an undefined variable named ‘CookbooksBranchPreview’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
       #Your build pipeline references an undefined variable named ‘GitRobe070CookbooksPAT’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
@@ -79,23 +81,24 @@ stages:
   parameters:
     stageName: 'w12r2d142AusEastPreview'
     stagedisplayName: 'w12r2d142 Aus East Preview'
-    dependsOn: 'Merge patch/paas cookbooks'
+    dependsOn: 'MergePatch_PAASCookbooks'
     jobName: 'w12r2d142AusEastPreview'
 
 - template: templates/debjit-stages.yml
   parameters:
     stageName: 'w12r2d142USEastPreview'
     stagedisplayName: 'w12r2d142 US East Preview'
-    dependsOn: 'Merge patch/paas cookbooks'
+    dependsOn: 'MergePatch_PAASCookbooks'
     jobName: 'w12r2d142USEastPreview'
 
 - stage: 'GoLive'
   displayName: 'Go Live'
   dependsOn: 
-    - 'w12r2d142 Aus East Preview'
-    - 'w12r2d142 US East Preview'
+    - 'w12r2d142AusEastPreview'
+    - 'w12r2d142USEastPreview'
   jobs: 
-  - job: 'Agentless job'
+  - job: 'AgentlessJob'
+    displayName: 'Agentless job'
     pool: server
     steps:
     - task: ManualIntervention@8
@@ -109,11 +112,12 @@ stages:
           5. Increment the Test Version Preview Variable (TestVersionPrev<SKU>) in the "SKU Version" Variable Group.
           6. Only now the pipeline may be continued to test the preview images
 
-- stage: 'CookbooksMerge&Tag'
+- stage: 'CookbooksMergeAndTag'
   displayName: 'Cookbooks Merge & Tag'
-  dependsOn: 'Go Live'
+  dependsOn: 'GoLive'
   jobs: 
-  - job: 'Cookbooks Merge & Tag'
+  - job: 'CookbooksMergeAndTag'
+    displayName: 'Cookbooks Merge & Tag'
     steps:
     - task: PowerShell@2
       displayName: 'Artifact Check - Set Gate Variable'
@@ -172,12 +176,12 @@ stages:
   parameters:
     stageName: 'w12r2d142USEastProduction'
     stagedisplayName: 'w12r2d142 US East Production'
-    dependsOn: 'Cookbooks Merge & Tag'
+    dependsOn: 'CookbooksMergeAndTag'
     jobName: 'w12r2d142USEastProduction'
 
 - template: templates/debjit-stages.yml
   parameters:
     stageName: 'w12r2d150AsiaEastProduction'
     stagedisplayName: 'w12r2d150 Asia East Production'
-    dependsOn: 'Cookbooks Merge & Tag'
+    dependsOn: 'CookbooksMergeAndTag'
     jobName: 'w12r2d150AsiaEastProduction'
