@@ -14,15 +14,13 @@ stages:
       inputs:
         command: 'install'
 
-- stage: 'w12r2d142 Aus'
-  template: templates/debjit-stages.yml # Template reference
+- template: templates/debjit-stages.yml # Template reference
   parameters:
     stageName: 'w12r2d142 Aus'
     dependsOn: Build
     jobName: 'w12r2d142 Aus'
 
-- stage: 'w12r2d150 Aus'
-  template: templates/debjit-stages.yml # Template reference
+- template: templates/debjit-stages.yml # Template reference
   parameters:
     stageName: 'w12r2d150 Aus'
     dependsOn: Build
