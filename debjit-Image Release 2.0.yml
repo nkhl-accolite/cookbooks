@@ -49,7 +49,7 @@ stages:
 
 - stage: 'MergePatch_PAASCookbooks'
   displayName: 'Merge patch/paas cookbooks'
-  dependsOn: 'AgentlessJob'
+  dependsOn: 'PublishPreviewImages'
   jobs: 
   - job: 'MergePatch_PAASCookbooks'
     displayName: 'Merge patch/PAAS cookbooks'
