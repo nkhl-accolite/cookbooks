@@ -35,11 +35,11 @@ stages:
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn:
-    stageName: AUSSQLAZURE1DBw12r2d142
-    stageDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
-    jobName: AUSSQLAZURE1DBw12r2d142
-    jobDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w12r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    stageName: AUSSQLAZURE1DBw22r2d142
+    stageDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
+    jobName: AUSSQLAZURE1DBw22r2d142
+    jobDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
+    jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     version: w22r2d-14-2
     osName: Windows Server 2022
     SqlDeploymentName: SQLAZURE1
