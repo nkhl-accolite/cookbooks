@@ -21,7 +21,7 @@ parameters:
     default: none
   - name: mysqlTemplate
     type: string
-    default: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
+    default: $(Pipeline.Workspace)/_TemplatesCI\Solution Template/mainTemplate.json
   - name: mysqlTemplateParams
     type: string
     default: none
