@@ -62,9 +62,9 @@ stages:
 
 - stage: ProductionStage
   displayName: Production Stage
-  dependsOn: 
-    - AUSSQLAZURE1DBw12r2d142
-    - AUSSQLAZURE2DBw19d142
+  # dependsOn: 
+  #   - AUSSQLAZURE1DBw12r2d142
+  #   - AUSSQLAZURE2DBw19d142
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
