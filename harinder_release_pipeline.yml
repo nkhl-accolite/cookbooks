@@ -33,9 +33,9 @@ stages:
     jobName: AUSSQLAZURE1DBw12r2d-14-2
     jobDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w12r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    # SqlDeploymentName: SQLAZURE1
-    # deploymentOutput: SQLAZURE1-deploymentOutput
-    # resourceGroup: SQLAZURE1-TEST
+    SqlDeploymentName: SQLAZURE1
+    deploymentOutput: SQLAZURE1-deploymentOutput
+    resourceGroup: SQLAZURE1-TEST
     
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -44,9 +44,9 @@ stages:
     jobName: AUSSQLAZURE2DBw19d-14-2
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    # SqlDeploymentName: SQLAZURE2
-    # deploymentOutput: SQLAZURE2-deploymentOutput
-    # resourceGroup: SQLAZURE2-TEST
+    SqlDeploymentName: SQLAZURE2
+    deploymentOutput: SQLAZURE2-deploymentOutput
+    resourceGroup: SQLAZURE2-TEST
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
@@ -62,16 +62,16 @@ stages:
 
 - stage: ProductionStage
   displayName: Production Stage
-  dependsOn: 
-    - AUSSQLAZURE1DBw12r2d142
-    - AUSSQLAZURE2DBw19d142
+  # dependsOn: 
+  #   - AUSSQLAZURE1DBw12r2d142
+  #   - AUSSQLAZURE2DBw19d142
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
     pool: server
     steps:
     - task: ManualIntervention@8
-      displayName: 'Manual Intervention : Production Template'
+      displayName: 'Manual Intervention: Production Template'
       inputs:
         instructions: |
           Deploy the template to the Production Stage
