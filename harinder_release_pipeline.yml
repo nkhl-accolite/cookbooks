@@ -15,7 +15,8 @@ resources:
     - repository: _robe070_cookbooks
       type: github
       endpoint: nkhl-accolite
-      name: robe070/cookbooks
+      # name: robe070/cookbooks
+      name: nkhl-accolite
       ref: debug/paas
     - repository: _robe070_cookbooks
       type: github
