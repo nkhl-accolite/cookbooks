@@ -28,6 +28,7 @@ variables:
 stages:
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
+    dependsOn:
     stageName: AUSSQLAZURE1DBw12r2d142
     stageDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
     jobName: AUSSQLAZURE1DBw12r2d142
@@ -39,6 +40,7 @@ stages:
     
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
+    dependsOn: 
     stageName: AUSSQLAZURE2DBw19d142
     stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobName: AUSSQLAZURE2DBw19d142
