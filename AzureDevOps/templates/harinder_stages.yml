@@ -31,7 +31,7 @@ parameters:
   - name: SqlDeploymentName
     type: string
     default: none
-  - name: deploymentOutputs
+  - name: deploymentOutput
     type: string
     default: none
   - name: resourceGroup
