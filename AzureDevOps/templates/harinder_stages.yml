@@ -39,7 +39,7 @@ parameters:
     default: none
   - name: jobDemand
     type: string
-    default: none
+    default: ''
 
 stages:
   - stage: ${{ parameters.stageName }}
