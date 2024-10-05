@@ -31,10 +31,13 @@ parameters:
   - name: SqlDeploymentName
     type: string
     default: none
-  - name: deploymentOutput
+  - name: deploymentOutputs
     type: string
     default: none
   - name: resourceGroup
+    type: string
+    default: none
+  - name: jobDemand
     type: string
     default: none
 
