@@ -17,6 +17,11 @@ resources:
       endpoint: nkhl-accolite
       name: robe070/cookbooks
       ref: debug/paas
+    - repository: _robe070_cookbooks
+      type: github
+      endpoint: nkhl-accolite
+      name: robe070/cookbooks
+      ref: debug/paas
 
 variables:
   - group: Template Parameters
@@ -130,6 +135,10 @@ stages:
   dependsOn: 
     - AUSSQLAZURE1DBw12r2d142
     - AUSSQLAZURE2DBw19d142
+    - AUSSQLAZURE3DBw16d142
+    - AUSSQLAZURE4DBw19d150
+    - AUSSQLAZURE5DBw16d150
+    - AUSSQLAZURE6DBw12r2d150
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
