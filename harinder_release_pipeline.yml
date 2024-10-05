@@ -28,7 +28,7 @@ variables:
 stages:
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
-    stageName: AUSSQLAZURE1DBw12r2d-14-2
+    stageName: AUSSQLAZURE1DBw12r2d142
     stageDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
     jobName: AUSSQLAZURE1DBw12r2d-14-2
     jobDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
@@ -39,7 +39,7 @@ stages:
     
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
-    stageName: AUSSQLAZURE2DBw19d-14-2
+    stageName: AUSSQLAZURE2DBw19d142
     stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobName: AUSSQLAZURE2DBw19d-14-2
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
@@ -60,19 +60,19 @@ stages:
 #     armOverrideParameters: none
 #     mySqlDeploymentName: mysql1Test
 
-# - stage: ProductionStage
-#   displayName: Production Stage
-#   dependsOn: 
-#     - AUSSQLAZURE1DBw12r2d-14-2
-#     - AUSMYSQL1DBw19d-15-0
-#   jobs: 
-#   - job: AgentlessJob
-#     displayName: 'Manual Intervention: Deploy Template'
-#     pool: server
-#     steps:
-#     - task: ManualIntervention@8
-#       displayName: 'Manual Intervention : Production Template'
-#       inputs:
-#         instructions: |
-#           Deploy the template to the Production Stage
+- stage: ProductionStage
+  displayName: Production Stage
+  dependsOn: 
+    - AUSSQLAZURE1DBw12r2d142
+    - AUSSQLAZURE2DBw19d142
+  jobs: 
+  - job: AgentlessJob
+    displayName: 'Manual Intervention: Deploy Template'
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Manual Intervention : Production Template'
+      inputs:
+        instructions: |
+          Deploy the template to the Production Stage
      
