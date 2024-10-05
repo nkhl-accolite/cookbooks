@@ -60,19 +60,19 @@ stages:
 #     armOverrideParameters: none
 #     mySqlDeploymentName: mysql1Test
 
-- stage: ProductionStage
-  displayName: Production Stage
-  dependsOn: 
-    - AUSSQLAZURE1DBw12r2d-14-2
-    - AUSMYSQL1DBw19d-15-0
-  jobs: 
-  - job: AgentlessJob
-    displayName: 'Manual Intervention: Deploy Template'
-    pool: server
-    steps:
-    - task: ManualIntervention@8
-      displayName: 'Manual Intervention : Production Template'
-      inputs:
-        instructions: |
-          Deploy the template to the Production Stage
+# - stage: ProductionStage
+#   displayName: Production Stage
+#   dependsOn: 
+#     - AUSSQLAZURE1DBw12r2d-14-2
+#     - AUSMYSQL1DBw19d-15-0
+#   jobs: 
+#   - job: AgentlessJob
+#     displayName: 'Manual Intervention: Deploy Template'
+#     pool: server
+#     steps:
+#     - task: ManualIntervention@8
+#       displayName: 'Manual Intervention : Production Template'
+#       inputs:
+#         instructions: |
+#           Deploy the template to the Production Stage
      
