@@ -30,7 +30,7 @@ stages:
   parameters:
     stageName: AUSSQLAZURE1DBw12r2d142
     stageDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
-    jobName: AUSSQLAZURE1DBw12r2d-14-2
+    jobName: AUSSQLAZURE1DBw12r2d142
     jobDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w12r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     SqlDeploymentName: SQLAZURE1
@@ -41,7 +41,7 @@ stages:
   parameters:
     stageName: AUSSQLAZURE2DBw19d142
     stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
-    jobName: AUSSQLAZURE2DBw19d-14-2
+    jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     SqlDeploymentName: SQLAZURE2
@@ -62,9 +62,9 @@ stages:
 
 - stage: ProductionStage
   displayName: Production Stage
-  # dependsOn: 
-  #   - AUSSQLAZURE1DBw12r2d142
-  #   - AUSSQLAZURE2DBw19d142
+  dependsOn: 
+    - AUSSQLAZURE1DBw12r2d142
+    - AUSSQLAZURE2DBw19d142
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
