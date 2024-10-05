@@ -37,9 +37,6 @@ parameters:
   - name: resourceGroup
     type: string
     default: none
-  - name: jobDemand
-    type: string
-    default: ''
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -57,7 +54,6 @@ stages:
 
       pool:
         vmImage: ${{ parameters.vmImage }}
-        demands: ${{ parameters.jobDemand }}
 
       steps:
         - download: _TemplatesCI
