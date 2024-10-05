@@ -61,14 +61,16 @@ stages:
         - download: _BuildImageReleaseArtefacts
           displayName: Latest artefacts from Build Image Release Artefacts 3.0
         - checkout: _lansa_azure_quickstart_templates
+          path: _lansa_azure_quickstart_templates
         - checkout: _robe070_cookbooks
+          path: _robe070_cookbooks
 
         - task: PowerShell@2
           name: Gate
           displayName: 'Artifact Check: Set Gate Variable'
           inputs:
             targetType: filePath
-            filePath: '$(Pipeline.Workspace)/s/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
+            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
             arguments: '-Version "w12r2d-14-2" -osName "Windows Server 2022"'
 
         - powershell: |
@@ -155,7 +157,7 @@ stages:
           displayName: 'Test ARM Deployment: URL Tests'
           inputs:
             targetType: filePath
-            filePath: '$(Pipeline.Workspace)/s/_robe070_cookbooks/scripts/azure_url_tests.ps1'
+            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
             arguments: '-deploymentOutput ''${{ parameters.deploymentOutputs }}'''
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
@@ -163,7 +165,7 @@ stages:
           displayName: 'Test Image Version'
           inputs:
             azureSubscription: 'Azure Baking Images'
-            ScriptPath: '$(Pipeline.Workspace)/s/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
+            ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
             ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput ''${{ parameters.deploymentOutputs }}'''
             azurePowerShellVersion: LatestVersion
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
