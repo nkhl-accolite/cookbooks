@@ -1,0 +1,180 @@
+parameters:
+  - name: stageName
+    type: string
+    default: none
+  - name: stageDisplayname
+    type: string
+    default: none
+  - name: dependsOn
+    default: []
+  - name: jobName
+    type: string
+    default: none
+  - name: jobDisplayname
+    type: string
+    default: none
+  - name: vmImage
+    type: string
+    default: Windows-2022
+  - name: jobcondition
+    type: string
+    default: none
+  - name: mysqlTemplate
+    type: string
+    default: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
+  - name: mysqlTemplateParams
+    type: string
+    default: none
+  - name: armOverrideParameters
+    type: string
+    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"
+  - name: SqlDeploymentName
+    type: string
+    default: none
+  - name: deploymentOutputs
+    type: string
+    default: none
+  - name: resourceGroup
+    type: string
+    default: none
+
+stages:
+  - stage: ${{ parameters.stageName }}
+    dependsOn: ${{ parameters.dependsOn }}
+    displayName: ${{ parameters.stageDisplayname }}
+    jobs:
+    - job: ${{ parameters.jobName }}
+      timeoutInMinutes: 120
+      variables:
+        ResourceGroup: ${{ parameters.resourceGroup }}
+        imageReleaseState: 'Production'
+      cancelTimeoutInMinutes: 1
+      condition: ${{ parameters.jobcondition}}
+      displayName: ${{ parameters.jobDisplayname }}
+
+      pool:
+        vmImage: ${{ parameters.vmImage }}
+        demands: ${{ parameters.jobDemand }}
+
+      steps:
+        - download: _TemplatesCI
+          displayName: Latest artefacts from Templates CI
+        - download: _BuildImageReleaseArtefacts
+          displayName: Latest artefacts from Build Image Release Artefacts 3.0
+        - checkout: _lansa_azure_quickstart_templates
+        - checkout: _robe070_cookbooks
+
+        - task: PowerShell@2
+          name: Gate
+          displayName: 'Artifact Check : Set Gate Variable'
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
+            arguments: '-Version "w12r2d-14-2" -osName "Windows Server 2022"'
+
+        - powershell: |
+            # Print the Gate variables. 
+            Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
+          displayName: 'Artifact Check : Output Gate Variable'
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: AzurePowerShell@5
+          displayName: 'Delete Resource Group'
+          inputs:
+            azureSubscription: 
+            ScriptType: InlineScript
+            Inline: |
+              Write-Host "Deleting Resource Group $(ResourceGroup)"
+              Remove-AzResourceGroup -Name $(ResourceGroup) -Force
+            errorActionPreference: silentlyContinue
+            azurePowerShellVersion: LatestVersion
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'ARM Template deployment: ${{ parameters.stageName }}'
+          inputs:
+            azureResourceManagerConnection: 'Azure Baking Images'
+            subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+            resourceGroupName: '$(ResourceGroup)'
+            location: 'Australia East'
+            csmFile: ${{ parameters.mysqlTemplate}}
+            csmParametersFile: ${{ parameters.mysqlTemplateParams }}
+            deploymentName: ${{ parameters.SqlDeploymentName }}
+            overrideParameters: ${{ parameters.armOverrideParameters }}
+            deploymentOutputs: ${{ parameters.deploymentOutputs }}
+            addSpnToEnvironment: true
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - ${{if or(eq(parameters.stageName, 'AUSMYSQL1DBw19d-15-0'), eq(parameters.stageName, 'AUSMSSQLS1DBw19d-14-2')) }}:
+          - powershell: |
+              # Print the Deployment Output
+              Write-Host "$(mysqldb1deploymentOutput)" | out-default | Write-Verbose
+              
+              $deploymentOutput =ConvertFrom-Json '$(mysqldb1deploymentOutput)'
+              $serverName = $deploymentOutput.serverName.value
+              Write-Host "##vso[task.setvariable variable=serverName;isOutput=true]$serverName" | Out-Default | Write-Verbose 
+            displayName: 'Get MySQL DB ServerName'
+            name: mysqlDBOutput
+            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'ARM Template deployment: MYSQL1-TemplateTest'
+            inputs:
+              azureResourceManagerConnection: 'Azure Baking Images'
+              subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+              resourceGroupName: '$(ResourceGroup)'
+              location: 'Australia East'
+              csmFile: '$(Pipeline.Workspace)/_LansaTemplates/Solution Template/mainTemplate.json'
+              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"'
+              deploymentName: MYSQL1
+              # deploymentOutputs: deploymentOutput
+              deploymentOutputs: ${{ parameters.SqlDeploymentName }}
+              addSpnToEnvironment: true
+            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+
+
+        - powershell: |
+            # Print the Deployment Output
+            # Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
+            Write-Host "${{ parameters.deploymentOutputs }}" | out-default | Write-Verbose
+          displayName: 'Print Deployment Output'
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
+          displayName: 'Azure Resource Group Tagging'
+          inputs:
+            ConnectedServiceName: 'Azure Baking Images'
+            ResourceGroupName: '$(ResourceGroup)'
+            Key: Usage
+            Value: 'test-temp'
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: PowerShell@2
+          displayName: 'Test ARM Deployment: URL Tests'
+          inputs:
+            targetType: filePath
+            filePath: './$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
+            arguments: '-deploymentOutput ''${{ parameters.deploymentOutputs }}'''
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: AzurePowerShell@5
+          displayName: 'Test Image Version'
+          inputs:
+            azureSubscription: 'Azure Baking Images'
+            ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
+            ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput ''${{ parameters.deploymentOutputs }}'''
+            azurePowerShellVersion: LatestVersion
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Delete Resource Group'
+          inputs:
+            azureResourceManagerConnection: 'Azure Baking Images'
+            subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+            action: DeleteRG
+            resourceGroupName: '$(ResourceGroup)'
+          continueOnError: true
+          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))

@@ -1,0 +1,78 @@
+trigger: none
+
+resources:
+  pipelines:
+    - pipeline: _TemplatesCI
+      source: Templates CI
+    - pipeline: _BuildImageReleaseArtefacts
+      source: Build Image Release Artefacts 3.0
+  repositories:
+    - repository: _lansa_azure_quickstart_templates
+      type: github
+      endpoint: nkhl-accolite
+      name: lansa/azure-quickstart-templates
+      ref: support/scalable
+    - repository: _robe070_cookbooks
+      type: github
+      endpoint: nkhl-accolite
+      name: robe070/cookbooks
+      ref: debug/paas
+
+variables:
+  - group: Template Parameters
+  - group: SKU Versions
+  - group: Image Names
+  - group: Azure Logins
+  - group: Git Repos
+
+stages:
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    stageName: AUSSQLAZURE1DBw12r2d-14-2
+    stageDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
+    jobName: AUSSQLAZURE1DBw12r2d-14-2
+    jobDisplayname: AUS SQLAZURE1 DB w12r2d-14-2
+    jobcondition: and(succeeded(), or(eq(variables['Build-w12r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    SqlDeploymentName: SQLAZURE1
+    deploymentOutput: SQLAZURE1-deploymentOutput
+    resourceGroup: SQLAZURE1-TEST
+    
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    stageName: AUSSQLAZURE2DBw19d-14-2
+    stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
+    jobName: AUSSQLAZURE2DBw19d-14-2
+    jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    SqlDeploymentName: SQLAZURE2
+    deploymentOutput: SQLAZURE2-deploymentOutput
+    resourceGroup: SQLAZURE2-TEST
+
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     stageName: AUSMYSQL1DBw19d-15-0
+#     stageDisplayname: AUS MYSQL1 DB w19d-15-0
+#     jobName: AUSMYSQL1DBw19d-15-0
+#     jobDisplayname: AUS MYSQL1 DB w19d-15-0
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     mysqlTemplate: $(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+#     mysqlTemplateParams: $(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+#     armOverrideParameters: none
+#     mySqlDeploymentName: mysql1Test
+
+- stage: ProductionStage
+  displayName: Production Stage
+  dependsOn: 
+    - AUSSQLAZURE1DBw12r2d-14-2
+    - AUSMYSQL1DBw19d-15-0
+  jobs: 
+  - job: AgentlessJob
+    displayName: 'Manual Intervention: Deploy Template'
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Manual Intervention : Production Template'
+      inputs:
+        instructions: |
+          Deploy the template to the Production Stage
+     
