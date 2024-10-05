@@ -19,24 +19,24 @@ parameters:
   - name: jobcondition
     type: string
     default: none
-  # - name: mysqlTemplate
-  #   type: string
-  #   default: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
-  # - name: mysqlTemplateParams
-  #   type: string
-  #   default: none
-  # - name: armOverrideParameters
-  #   type: string
-  #   default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"
-  # - name: SqlDeploymentName
-  #   type: string
-  #   default: none
-  # - name: deploymentOutput
-  #   type: string
-  #   default: none
-  # - name: resourceGroup
-  #   type: string
-  #   default: none
+  - name: mysqlTemplate
+    type: string
+    default: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
+  - name: mysqlTemplateParams
+    type: string
+    default: none
+  - name: armOverrideParameters
+    type: string
+    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"
+  - name: SqlDeploymentName
+    type: string
+    default: none
+  - name: deploymentOutput
+    type: string
+    default: none
+  - name: resourceGroup
+    type: string
+    default: none
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -106,7 +106,7 @@ stages:
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
-        - ${{if or(eq(parameters.stageName, 'AUSMYSQL1DBw19d-15-0'), eq(parameters.stageName, 'AUSMSSQLS1DBw19d-14-2')) }}:
+        - ${{if or(eq(parameters.stageName, 'AUSMYSQL1DBw19d150'), eq(parameters.stageName, 'AUSMSSQLS1DBw19d142')) }}:
           - powershell: |
               # Print the Deployment Output
               Write-Host "$(mysqldb1deploymentOutput)" | out-default | Write-Verbose
