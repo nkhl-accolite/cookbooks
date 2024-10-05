@@ -37,6 +37,8 @@ stages:
     SqlDeploymentName: SQLAZURE1
     deploymentOutputs: SQLAZURE1-deploymentOutput
     resourceGroup: SQLAZURE1-TEST
+    version: w22r2d-14-2
+    osName: Windows Server 2022
     
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -49,6 +51,8 @@ stages:
     SqlDeploymentName: SQLAZURE2
     deploymentOutputs: SQLAZURE2-deploymentOutput
     resourceGroup: SQLAZURE2-TEST
+    version: w19d-14-2
+    osName: Windows Server 2019
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
