@@ -134,7 +134,7 @@ stages:
 - stage: ProductionStage
   displayName: Production Stage
   dependsOn: 
-    - AUSSQLAZURE1DBw12r2d142
+    - AUSSQLAZURE1DBw22r2d142
     - AUSSQLAZURE2DBw19d142
     - AUSSQLAZURE3DBw16d142
     - AUSSQLAZURE4DBw19d150
