@@ -63,9 +63,9 @@ stages:
 
       steps:
         - download: _TemplatesCI
-          displayName: Latest artefacts from Templates CI
+          displayName: Download artefacts from Template CI 3.0
         - download: _BuildImageReleaseArtefacts
-          displayName: Latest artefacts from Build Image Release Artefacts 3.0
+          displayName: Download artefacts from Build Image Release Artefacts 3.0
         - checkout: _lansa_azure_quickstart_templates
           path: _lansa_azure_quickstart_templates
         - checkout: _robe070_cookbooks
@@ -99,7 +99,7 @@ stages:
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
         - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'ARM Template deployment: ${{ parameters.stageName }}'
+          displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
           inputs:
             azureResourceManagerConnection: 'Azure Baking Images'
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
