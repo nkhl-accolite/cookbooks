@@ -27,7 +27,7 @@ parameters:
     default: ''
   - name: armOverrideParameters
     type: string
-    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku Standard -agpublicIpAllocationMethod Static
+    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard_v2" -applicationGatewaySkuName "Standard_v2" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"
   - name: SqlDeploymentName
     type: string
     default: none
@@ -113,32 +113,32 @@ stages:
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
-        - ${{if or(eq(parameters.stageName, 'AUSMYSQL1DBw19d150'), eq(parameters.stageName, 'AUSMSSQLS1DBw19d142')) }}:
-          - powershell: |
-              # Print the Deployment Output
-              Write-Host "$(mysqldb1deploymentOutput)" | out-default | Write-Verbose
+        # - ${{if or(eq(parameters.stageName, 'AUSMYSQL1DBw19d150'), eq(parameters.stageName, 'AUSMSSQLS1DBw19d142')) }}:
+        #   - powershell: |
+        #       # Print the Deployment Output
+        #       Write-Host "$(mysqldb1deploymentOutput)" | out-default | Write-Verbose
               
-              $deploymentOutput =ConvertFrom-Json '$(mysqldb1deploymentOutput)'
-              $serverName = $deploymentOutput.serverName.value
-              Write-Host "##vso[task.setvariable variable=serverName;isOutput=true]$serverName" | Out-Default | Write-Verbose 
-            displayName: 'Get MySQL DB ServerName'
-            name: mysqlDBOutput
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+        #       $deploymentOutput =ConvertFrom-Json '$(mysqldb1deploymentOutput)'
+        #       $serverName = $deploymentOutput.serverName.value
+        #       Write-Host "##vso[task.setvariable variable=serverName;isOutput=true]$serverName" | Out-Default | Write-Verbose 
+        #     displayName: 'Get MySQL DB ServerName'
+        #     name: mysqlDBOutput
+        #     condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
-          - task: AzureResourceManagerTemplateDeployment@3
-            displayName: 'ARM Template deployment: MYSQL1-TemplateTest'
-            inputs:
-              azureResourceManagerConnection: 'Azure Baking Images'
-              subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
-              resourceGroupName: '$(ResourceGroup)'
-              location: 'Australia East'
-              csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
-              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"'
-              deploymentName: MYSQL1
-              # deploymentOutputs: deploymentOutput
-              deploymentOutputs: ${{ parameters.SqlDeploymentName }}
-              addSpnToEnvironment: true
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+        #   - task: AzureResourceManagerTemplateDeployment@3
+        #     displayName: 'ARM Template deployment: MYSQL1-TemplateTest'
+        #     inputs:
+        #       azureResourceManagerConnection: 'Azure Baking Images'
+        #       subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+        #       resourceGroupName: '$(ResourceGroup)'
+        #       location: 'Australia East'
+        #       csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
+        #       overrideParameters: ${{ parameters.armOverrideParameters }}
+        #       deploymentName: MYSQL1
+        #       # deploymentOutputs: deploymentOutput
+        #       deploymentOutputs: ${{ parameters.SqlDeploymentName }}
+        #       addSpnToEnvironment: true
+        #     condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
 
 
