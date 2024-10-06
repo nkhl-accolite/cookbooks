@@ -27,7 +27,7 @@ parameters:
     default: ''
   - name: armOverrideParameters
     type: string
-    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable"
+    default: -osName "$(Gate.osName)" -lansaVersion "V15 GA" -imageReleaseState "Preview" -msiURL "$(msiURLv15)" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "Standard" -applicationGatewaySkuName "Standard_Small" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "existing" -databaseType "MYSQL" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku Standard -agpublicIpAllocationMethod Static
   - name: SqlDeploymentName
     type: string
     default: none
