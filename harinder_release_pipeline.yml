@@ -57,7 +57,7 @@ stages:
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
     databaseType: MYSQL
-    deploymentOutputs: SQLAZURE2-deploymentOutput
+    deploymentOutputs: SQLAZURE2deploymentOutput
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
     osName: Windows Server 2019
