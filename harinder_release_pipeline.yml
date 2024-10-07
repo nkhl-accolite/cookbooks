@@ -56,8 +56,7 @@ stages:
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
-    databaseType: MYSQL
-    deploymentOutputs: SQLAZURE2deploymentOutput
+    # databaseType: MYSQL
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
     osName: Windows Server 2019
@@ -68,20 +67,24 @@ stages:
     version: w19d-14-2
 
 
-# - template: AzureDevOps\templates\harinder_stages.yml
-#   parameters:
-#     dependsOn: 
-#     stageName: AUSSQLAZURE3DBw16d142
-#     stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
-#     jobName: AUSSQLAZURE3DBw16d142
-#     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-#     version: w16d-14-2
-#     osN]  ame: Windows Server 2016
-#     SqlDeploymentName: SQLAZURE3
-#     deploymentOutputs: SQLAZURE3-deploymentOutput
-#     resourceGroup: SQLAZURE3-TEST
-#     msiURL: $(msiURLv142)
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSSQLAZURE3DBw16d142
+    stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
+    jobName: AUSSQLAZURE3DBw16d142
+    jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    # databaseType: MYSQL
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLv142)
+    osName: Windows Server 2016
+    requestedServiceObjectiveName: S4
+    resourceGroup: SQLAZURE3-TEST
+    SqlDeploymentName: SQLAZURE3
+    stackName: SQL3VMSS
+    version: w19d-14-2
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
