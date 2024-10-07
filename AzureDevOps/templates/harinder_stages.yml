@@ -49,9 +49,6 @@ parameters:
   - name: lansaVersion 
     type: string
     default: none
-  - name: stackName 
-    type: string
-    default: none
   - name: databaseType  
     type: string
     default: none
