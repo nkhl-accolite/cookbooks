@@ -183,7 +183,7 @@ stages:
   displayName: Production Stage
   dependsOn: 
     - AUSMSSQLS1DBw19d142
-    - AUSSQLAZURE4DBw19d150
+    - AUSMYSQL1DBw19d150
     - AUSSQLAZURE3DBw16d142
     - AUSSQLAZURE2DBw19d142
 
