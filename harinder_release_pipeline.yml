@@ -55,6 +55,7 @@ stages:
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    csmFile: mainTemplate.json
     databaseNewOrExisting: new
     # databaseType: MYSQL
     lansaVersion: V14 SP2
@@ -75,6 +76,7 @@ stages:
     jobName: AUSSQLAZURE3DBw16d142
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    csmFile: mainTemplate.json
     databaseNewOrExisting: new
     # databaseType: MYSQL
     lansaVersion: V14 SP2
@@ -134,35 +136,65 @@ stages:
 #     resourceGroup: SQLAZURE6-TEST
 
 
-# - template: AzureDevOps\templates\harinder_stages.yml
-#   parameters:
-#     stageName: AUSMYSQL1DBw19d150
-#     stageDisplayname: AUS MYSQL1 DB w19d-15-0
-#     jobName: AUSMYSQL1DBw19d150
-#     jobDisplayname: AUS MYSQL1 DB w19d-15-0
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-#     csmFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
-#     csmParametersFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
-#     armOverrideParameters: none
-#     mySqlDeploymentName: mysql1Test
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSMYSQL1DBw19d150
+    stageDisplayname: AUS MYSQL1 DB w19d-15-0
+    jobName: AUSMYSQL1DBw19d150
+    jobDisplayname: AUS MYSQL1 DB w19d-15-0
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    csmFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+    csmParametersFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+    databaseNewOrExisting: existing
+    lansaVersion: V15 GA
+    msiURL: $(msiURLv15)
+    osName: Windows Server 2019
+    requestedServiceObjectiveName: S12
+    resourceGroup: mysql1Test
+    SqlDeploymentName: mysql1Test
+    stackName: MYSQLVMSS
+    version: w19d-15-0
 
-# - stage: ProductionStage
-#   displayName: Production Stage
-#   dependsOn: 
-#     - AUSSQLAZURE1DBw22r2d142
-#     - AUSSQLAZURE2DBw19d142
-#     - AUSSQLAZURE3DBw16d142
-#     - AUSSQLAZURE4DBw19d150
-#     - AUSSQLAZURE5DBw16d150
-#     - AUSSQLAZURE6DBw12r2d150
-#   jobs: 
-#   - job: AgentlessJob
-#     displayName: 'Manual Intervention: Deploy Template'
-#     pool: server
-#     steps:
-#     - task: ManualIntervention@8
-#       displayName: 'Manual Intervention: Production Template'
-#       inputs:
-#         instructions: |
-#           Deploy the template to the Production Stage
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSMSSQLS1DBw19d142
+    stageDisplayname: AUS MSSQLS1 DB w19d-14-2
+    jobName: AUSMSSQLS1DBw19d142
+    jobDisplayname: AUS MSSQLS1 DB w19d-14-2
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    applicationGatewaySkuName: WAF_Medium
+    applicationGatewaySkuTier: WAF
+    csmFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+    csmParametersFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+    databaseNewOrExisting: existing
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLv142)
+    osName: Windows Server 2019
+    requestedServiceObjectiveName: S2
+    resourceGroup: mysql1Test
+    SqlDeploymentName: mysql1Test
+    stackName: MSSQLVMSS
+    version: w19d-15-0
+
+- stage: ProductionStage
+  displayName: Production Stage
+  dependsOn: 
+    - AUSMSSQLS1DBw19d142
+    - AUSSQLAZURE4DBw19d150
+    - AUSSQLAZURE3DBw16d142
+    - AUSSQLAZURE2DBw19d142
+
+  jobs: 
+  - job: AgentlessJob
+    displayName: 'Manual Intervention: Deploy Template'
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Manual Intervention: Production Template'
+      inputs:
+        instructions: |
+          Deploy the template to the Production Stage
      
