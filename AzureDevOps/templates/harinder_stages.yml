@@ -136,6 +136,7 @@ stages:
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
+          name: sqlazuredeployment
           inputs:
             azureResourceManagerConnection: 'Azure Baking Images'
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
@@ -197,7 +198,7 @@ stages:
         - powershell: |
             # Print the Deployment Output
             # Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
-            Write-Host "${{ parameters.deploymentOutputs }}" | out-default | Write-Verbose
+            Write-Host "$(sqlazuredeployment.${{ parameters.deploymentOutputs }})" | out-default | Write-Verbose
           displayName: 'Print Deployment Output'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
@@ -227,7 +228,7 @@ stages:
           inputs:
             targetType: filePath
             filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
-            arguments: '-deploymentOutput ''${{ parameters.deploymentOutputs }}'''
+            arguments: '-deploymentOutput '''
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
         - task: AzurePowerShell@5
