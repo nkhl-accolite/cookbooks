@@ -146,7 +146,7 @@ stages:
             csmParametersFile: ${{ parameters.csmParametersFile }}
             deploymentName: ${{ parameters.SqlDeploymentName }}
             overrideParameters: -osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "$(msiURLv142)" -stackName "${{ parameters.stackName }}" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "Standard" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"
-            deploymentOutputs: ${{ parameters.deploymentOutputs }}
+            deploymentOutputs: deploymentOutput
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
@@ -197,8 +197,7 @@ stages:
 
         - powershell: |
             # Print the Deployment Output
-            # Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
-            Write-Host "$(sqlazuredeployment.${{ parameters.deploymentOutputs }})" | out-default | Write-Verbose
+            Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
           displayName: 'Print Deployment Output'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
@@ -228,7 +227,7 @@ stages:
           inputs:
             targetType: filePath
             filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
-            arguments: '-deploymentOutput '''
+            arguments: '-deploymentOutput $(deploymentOutput)'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
         - task: AzurePowerShell@5
@@ -236,7 +235,7 @@ stages:
           inputs:
             azureSubscription: 'Azure Baking Images'
             ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
-            ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput ''${{ parameters.deploymentOutputs }}'''
+            ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
