@@ -31,9 +31,9 @@ parameters:
   - name: csmParametersFileMySQL1DB
     type: string
     default: ''
-  # - name: overrideParameters
-  #   type: string
-  #   default: ''
+  - name: overrideParameters
+    type: string
+    default: ''
   - name: stackName
     type: string
     default: ''
