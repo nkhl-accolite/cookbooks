@@ -12,17 +12,17 @@ resources:
       endpoint: nkhl-accolite
       name: lansa/azure-quickstart-templates
       ref: support/scalable
-    - repository: _robe070_cookbooks
-      type: github
-      endpoint: nkhl-accolite
-      # name: robe070/cookbooks
-      name: nkhl-accolite/cookbooks
-      ref: debug/paas
-    - repository: _robe070_cookbooks
-      type: github
-      endpoint: nkhl-accolite
-      name: robe070/cookbooks
-      ref: debug/paas
+    # - repository: _robe070_cookbooks
+    #   type: github
+    #   endpoint: nkhl-accolite
+    #   # name: robe070/cookbooks
+    #   name: nkhl-accolite/cookbooks
+    #   ref: debug/paas
+    # - repository: _robe070_cookbooks
+    #   type: github
+    #   endpoint: nkhl-accolite
+    #   name: robe070/cookbooks
+    #   ref: debug/paas
 
 variables:
   - group: Template Parameters
@@ -32,19 +32,19 @@ variables:
   - group: Git Repos
 
 stages:
-- template: AzureDevOps\templates\harinder_stages.yml
-  parameters:
-    dependsOn:
-    stageName: AUSSQLAZURE1DBw22r2d142
-    stageDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
-    jobName: AUSSQLAZURE1DBw22r2d142
-    jobDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w22r2d-14-2
-    osName: Windows Server 2022
-    SqlDeploymentName: SQLAZURE1
-    deploymentOutputs: SQLAZURE1-deploymentOutput
-    resourceGroup: SQLAZURE1-TEST
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     dependsOn:
+#     stageName: AUSSQLAZURE1DBw22r2d142
+#     stageDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
+#     jobName: AUSSQLAZURE1DBw22r2d142
+#     jobDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+#     version: w22r2d-14-2
+#     osName: Windows Server 2022
+#     SqlDeploymentName: SQLAZURE1
+#     deploymentOutputs: SQLAZURE1-deploymentOutput
+#     resourceGroup: SQLAZURE1-TEST
 
     
 - template: AzureDevOps\templates\harinder_stages.yml
@@ -55,99 +55,111 @@ stages:
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w19d-14-2
-    osName: Windows Server 2019
-    SqlDeploymentName: SQLAZURE2
+    databaseNewOrExisting: new
+    databaseType: MYSQL
     deploymentOutputs: SQLAZURE2-deploymentOutput
-    resourceGroup: SQLAZURE2-TEST
-
-
-- template: AzureDevOps\templates\harinder_stages.yml
-  parameters:
-    dependsOn: 
-    stageName: AUSSQLAZURE3DBw16d142
-    stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
-    jobName: AUSSQLAZURE3DBw16d142
-    jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w16d-14-2
-    osName: Windows Server 2016
-    SqlDeploymentName: SQLAZURE3
-    deploymentOutputs: SQLAZURE3-deploymentOutput
-    resourceGroup: SQLAZURE3-TEST
-
-- template: AzureDevOps\templates\harinder_stages.yml
-  parameters:
-    dependsOn: 
-    stageName: AUSSQLAZURE4DBw19d150
-    stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
-    jobName: AUSSQLAZURE4DBw19d150
-    jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w19d-15-0
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLv142)
     osName: Windows Server 2019
-    SqlDeploymentName: SQLAZURE4
-    deploymentOutputs: SQLAZURE4-deploymentOutput
-    resourceGroup: SQLAZURE4-TEST
-
-- template: AzureDevOps\templates\harinder_stages.yml
-  parameters:
-    dependsOn: 
-    stageName: AUSSQLAZURE5DBw16d150
-    stageDisplayname: AUS SQLAZURE5 DB w16d-15-0
-    jobName: AUSSQLAZURE5DBw16d150
-    jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w16d-15-0
-    osName: Windows Server 2016
-    SqlDeploymentName: SQLAZURE5
-    deploymentOutputs: SQLAZURE5-deploymentOutput
-    resourceGroup: SQLAZURE5-TEST
-
-- template: AzureDevOps\templates\harinder_stages.yml
-  parameters:
-    dependsOn: 
-    stageName: AUSSQLAZURE6DBw12r2d150
-    stageDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
-    jobName: AUSSQLAZURE6DBw12r2d150
-    jobDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-    version: w22r2d-15-0
-    osName: Windows Server 2022
-    SqlDeploymentName: SQLAZURE6
-    deploymentOutputs: SQLAZURE6-deploymentOutput
-    resourceGroup: SQLAZURE6-TEST
+    requestedServiceObjectiveName: S0
+    resourceGroup: SQLAZURE2-TEST
+    SqlDeploymentName: SQLAZURE2
+    stackName: SQL2VMSS
+    version: w19d-14-2
 
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
-#     stageName: AUSMYSQL1DBw19d-15-0
+#     dependsOn: 
+#     stageName: AUSSQLAZURE3DBw16d142
+#     stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
+#     jobName: AUSSQLAZURE3DBw16d142
+#     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+#     version: w16d-14-2
+#     osN]  ame: Windows Server 2016
+#     SqlDeploymentName: SQLAZURE3
+#     deploymentOutputs: SQLAZURE3-deploymentOutput
+#     resourceGroup: SQLAZURE3-TEST
+#     msiURL: $(msiURLv142)
+
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     dependsOn: 
+#     stageName: AUSSQLAZURE4DBw19d150
+#     stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
+#     jobName: AUSSQLAZURE4DBw19d150
+#     jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     version: w19d-15-0
+#     stackName: SQL4VMSS
+#     osName: Windows Server 2019
+#     SqlDeploymentName: SQLAZURE4
+#     deploymentOutputs: SQLAZURE4-deploymentOutput
+#     resourceGroup: SQLAZURE4-TEST
+#     applicationGatewaySkuTier: WAF
+#     applicationGatewaySkuName: WAF_Medium
+#     requestedServiceObjectiveName: S12
+#     msiURL: $(msiURLv15)
+
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     dependsOn: 
+#     stageName: AUSSQLAZURE5DBw16d150
+#     stageDisplayname: AUS SQLAZURE5 DB w16d-15-0
+#     jobName: AUSSQLAZURE5DBw16d150
+#     jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     version: w16d-15-0
+#     osName: Windows Server 2016
+#     SqlDeploymentName: SQLAZURE5
+#     deploymentOutputs: SQLAZURE5-deploymentOutput
+#     resourceGroup: SQLAZURE5-TEST
+
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     dependsOn: 
+#     stageName: AUSSQLAZURE6DBw12r2d150
+#     stageDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
+#     jobName: AUSSQLAZURE6DBw12r2d150
+#     jobDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     version: w22r2d-15-0
+#     osName: Windows Server 2022
+#     SqlDeploymentName: SQLAZURE6
+#     deploymentOutputs: SQLAZURE6-deploymentOutput
+#     resourceGroup: SQLAZURE6-TEST
+
+
+# - template: AzureDevOps\templates\harinder_stages.yml
+#   parameters:
+#     stageName: AUSMYSQL1DBw19d150
 #     stageDisplayname: AUS MYSQL1 DB w19d-15-0
-#     jobName: AUSMYSQL1DBw19d-15-0
+#     jobName: AUSMYSQL1DBw19d150
 #     jobDisplayname: AUS MYSQL1 DB w19d-15-0
 #     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-#     mysqlTemplate: $(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
-#     mysqlTemplateParams: $(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+#     csmFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+#     csmParametersFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
 #     armOverrideParameters: none
 #     mySqlDeploymentName: mysql1Test
 
-- stage: ProductionStage
-  displayName: Production Stage
-  dependsOn: 
-    - AUSSQLAZURE1DBw22r2d142
-    - AUSSQLAZURE2DBw19d142
-    - AUSSQLAZURE3DBw16d142
-    - AUSSQLAZURE4DBw19d150
-    - AUSSQLAZURE5DBw16d150
-    - AUSSQLAZURE6DBw12r2d150
-  jobs: 
-  - job: AgentlessJob
-    displayName: 'Manual Intervention: Deploy Template'
-    pool: server
-    steps:
-    - task: ManualIntervention@8
-      displayName: 'Manual Intervention: Production Template'
-      inputs:
-        instructions: |
-          Deploy the template to the Production Stage
+# - stage: ProductionStage
+#   displayName: Production Stage
+#   dependsOn: 
+#     - AUSSQLAZURE1DBw22r2d142
+#     - AUSSQLAZURE2DBw19d142
+#     - AUSSQLAZURE3DBw16d142
+#     - AUSSQLAZURE4DBw19d150
+#     - AUSSQLAZURE5DBw16d150
+#     - AUSSQLAZURE6DBw12r2d150
+#   jobs: 
+#   - job: AgentlessJob
+#     displayName: 'Manual Intervention: Deploy Template'
+#     pool: server
+#     steps:
+#     - task: ManualIntervention@8
+#       displayName: 'Manual Intervention: Production Template'
+#       inputs:
+#         instructions: |
+#           Deploy the template to the Production Stage
      
