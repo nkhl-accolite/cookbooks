@@ -104,7 +104,7 @@ stages:
         - ${{ if startsWith(parameters.stageName, 'Production') }}:
           - powershell: |
               # This is to replace the main template from the release URL
-              Invoke-WebRequest -Uri "$(LansaReleaseTemplateUrl)" -OutFile "$(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/mainTemplate.json" -verbose
+              Invoke-WebRequest -Uri "$(LansaReleaseTemplateUrl)" -OutFile "$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json" -verbose
             displayName: 'Download from Azure Quick Start Template'
             condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
