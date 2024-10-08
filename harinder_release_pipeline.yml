@@ -167,8 +167,8 @@ stages:
     msiURL: $(msiURLv142)
     osName: Windows Server 2019
     requestedServiceObjectiveName: S2
-    resourceGroup: mysql1Test
-    SqlDeploymentName: mysql1Test
+    resourceGroup: mssqls1Test
+    SqlDeploymentName: mssqls1Test
     stackName: MSSQLVMSS
     version: w19d-15-0
 
