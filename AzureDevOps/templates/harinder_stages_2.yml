@@ -164,8 +164,8 @@ stages:
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
             location: 'Australia East'
-            csmFile: '$(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/$(csmFile)'
-            csmParametersFile: '$(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/$(csmParametersFile)'
+            csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/$(csmFile)'
+            csmParametersFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/$(csmParametersFile)'
             deploymentName: ${{ parameters.SqlDeploymentName }}
             deploymentOutputs: deploymentOutput_common
             addSpnToEnvironment: true
