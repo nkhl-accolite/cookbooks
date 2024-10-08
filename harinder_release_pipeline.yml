@@ -18,11 +18,11 @@ resources:
     #   # name: robe070/cookbooks
     #   name: nkhl-accolite/cookbooks
     #   ref: debug/paas
-    # - repository: _robe070_cookbooks
-    #   type: github
-    #   endpoint: nkhl-accolite
-    #   name: robe070/cookbooks
-    #   ref: debug/paas
+    - repository: _robe070_cookbooks_nkhl
+      type: github
+      endpoint: nkhl-accolite
+      name: robe070/cookbooks
+      ref: debug/paas
 
 variables:
   - group: Template Parameters
@@ -225,3 +225,56 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w19d-15-0j
     stackName: "$(Gate.VersionClean)"
     version: w19d-15-0j
+
+- stage: TagAzureQuickstartTemplatesRepo
+  dependsOn:
+    - ProductionTestsw19d150
+    - ProductionTestsw19d150j
+  displayName: Tag azure-quickstart-templates repo
+  jobs:
+  - job: TagAzureQuickstartTemplatesRepo
+    timeoutInMinutes: 120
+    variables:
+      ResourceGroup: ${{ parameters.resourceGroup }}
+      imageReleaseState: 'Production'
+      ConnectedServiceName: 'Azure Baking Images'
+
+    cancelTimeoutInMinutes: 1
+    condition: and(succeeded())
+    displayName: Tag azure-quickstart-templates repo
+    
+
+    pool:
+      vmImage: ${{ parameters.vmImage }}
+
+    steps:
+    - task: PowerShell@2
+      displayName: 'Artifact Check - Set Gate Variable'
+      name: Gate
+      inputs:
+        targetType: filePath
+        filePath: '$(Pipeline.Workspace)/_robe070_cookbooks_nkhl/scripts/azure_set_gate_variable.ps1'
+        arguments: '-Version "w19d-15-0" -osName "Windows Server 2019"'
+
+    - powershell: |
+        # Print the Gate variables.
+        if ( $(Gate.IsEnabled) -eq 'True' ) {
+            Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
+        } else {
+         Write-Host 'Gate.IsEnabled is set to false.'
+        }
+      displayName: 'Artifact Check - Output Gate Variable'
+
+    - task: PowerShell@2
+      displayName: 'Write access to Git Repo'
+      inputs:
+        targetType: filePath
+        filePath: '$(Pipeline.Workspace)/_robe070_cookbooks_nkhl/scripts/GitRepoWriteAccess.ps1'
+        arguments: '-GitBranch ''$(TemplatesBranchLive)'' -GitURL ''https://$(GitRobe070CookbooksPAT):x-oauth-basic@$(TemplatesGitHubName)'' -GitUserEmail ''$(GitUserEmail)'' -GitUserName ''$(GitUserName)'' -GitRepoName ''$(TemplatesSourceAlias)'''
+
+    - task: PowerShell@2
+      displayName: 'Tag Git repo'
+      inputs:
+        targetType: filePath
+        filePath: '$(Pipeline.Workspace)/_robe070_cookbooks_nkhl/scripts/GitTag.ps1'
+        arguments: '-GitRepoName ''$(TemplatesSourceAlias)'' -Tags ''AzureTemplate-Bld-$(Build.BuildId)-$(Release.ReleaseName)-$(Gate.Sku)'''
