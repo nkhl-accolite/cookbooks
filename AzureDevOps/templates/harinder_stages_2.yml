@@ -106,6 +106,8 @@ stages:
             value: mysqlParameters.json
           ${{ if eq( parameters.stageName, 'AUSMSSQLS1DBw19d142' ) }}:
             value: sqlServerParameters.json
+        - name: ConnectedServiceName
+          value: 'Azure Baking Images'
 
 
         
@@ -160,7 +162,7 @@ stages:
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
           name: sqlazuredeployment
           inputs:
-            azureResourceManagerConnection: 'Azure Baking Images'
+            azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
             location: 'Australia East'
@@ -186,7 +188,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: 'ARM Template deployment: MySQL1DB'
             inputs:
-              azureResourceManagerConnection: 'Azure Baking Images'
+              azureResourceManagerConnection: $(ConnectedServiceName)
               subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
               resourceGroupName: '$(ResourceGroup)'
               location: 'Australia East'
@@ -202,7 +204,7 @@ stages:
             displayName: 'Azure PowerShell script: GetServerIP'
             name: sqlDBOutput
             inputs:
-              azureSubscription: 'Azure Baking Images'
+              azureSubscription: $(ConnectedServiceName)
               ScriptType: InlineScript
               Inline: |
                 # Print the Deployment Output
@@ -218,7 +220,7 @@ stages:
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
             inputs:
-              azureResourceManagerConnection: 'Azure Baking Images'
+              azureResourceManagerConnection: $(ConnectedServiceName)
               subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
               resourceGroupName: '$(ResourceGroup)'
               location: 'Australia East'
@@ -238,7 +240,7 @@ stages:
         - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
           displayName: 'Azure Resource Group Tagging db'
           inputs:
-            ConnectedServiceName: 'Azure Baking Images'
+            ConnectedServiceName: $(ConnectedServiceName)
             ResourceGroupName: ${{ parameters.resourceGroup }}
             Key: Usage
             Value: 'test-temp'
@@ -248,7 +250,7 @@ stages:
         - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
           displayName: 'Azure Resource Group Tagging'
           inputs:
-            ConnectedServiceName: 'Azure Baking Images'
+            ConnectedServiceName: $(ConnectedServiceName)
             ResourceGroupName: '$(ResourceGroup)'
             Key: Usage
             Value: 'test-temp'
@@ -266,7 +268,7 @@ stages:
         - task: AzurePowerShell@5
           displayName: 'Test Image Version'
           inputs:
-            azureSubscription: 'Azure Baking Images'
+            azureSubscription: $(ConnectedServiceName)
             ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
             ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
@@ -275,7 +277,7 @@ stages:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Delete Resource Group'
           inputs:
-            azureResourceManagerConnection: 'Azure Baking Images'
+            azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             action: DeleteRG
             resourceGroupName: '$(ResourceGroup)'
