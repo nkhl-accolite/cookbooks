@@ -153,7 +153,7 @@ stages:
     stackName: MYSQLVMSS
     version: w19d-15-0
 
-- template: AzureDevOps\templates\harinder_stages.yml
+- template: AzureDevOps\templates\harinder_stages_2.yml
   parameters:
     dependsOn: 
     stageName: AUSMSSQLS1DBw19d142
