@@ -55,7 +55,6 @@ stages:
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    csmFileCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/Solution Template/mainTemplate.json
     databaseNewOrExisting: new
     databaseType: MYSQL
     lansaVersion: V14 SP2
