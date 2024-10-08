@@ -234,14 +234,10 @@ stages:
   jobs:
   - job: TagAzureQuickstartTemplatesRepo
     timeoutInMinutes: 120
-
     cancelTimeoutInMinutes: 1
-    condition: and(succeeded())
     displayName: Tag azure-quickstart-templates repo
-    
-
     pool:
-      vmImage: Windows-2022
+      vmImage: Windows-2022 
 
     steps:
     - task: PowerShell@2
