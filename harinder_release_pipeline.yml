@@ -234,10 +234,6 @@ stages:
   jobs:
   - job: TagAzureQuickstartTemplatesRepo
     timeoutInMinutes: 120
-    variables:
-      ResourceGroup: ${{ parameters.resourceGroup }}
-      imageReleaseState: 'Production'
-      ConnectedServiceName: 'Azure Baking Images'
 
     cancelTimeoutInMinutes: 1
     condition: and(succeeded())
@@ -245,7 +241,7 @@ stages:
     
 
     pool:
-      vmImage: ${{ parameters.vmImage }}
+      vmImage: Windows-2022
 
     steps:
     - task: PowerShell@2
