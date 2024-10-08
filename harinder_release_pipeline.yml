@@ -179,7 +179,6 @@ stages:
     - AUSMYSQL1DBw19d150
     - AUSSQLAZURE3DBw16d142
     - AUSSQLAZURE2DBw19d142
-
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
@@ -190,4 +189,39 @@ stages:
       inputs:
         instructions: |
           Deploy the template to the Production Stage
-     
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: ProductionStage
+    stageName: ProductionTestsw19d150
+    stageDisplayname: Production Tests w19d-15-0
+    jobName: ProductionTestsw19d150
+    jobDisplayname: Production Tests w19d-15-0
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    msiURL: $(msiURL)
+    osName: Windows Server 2019
+    requestedServiceObjectiveName: S4
+    resourceGroup: TemplateProd-Test-w19d-15-0
+    SqlDeploymentName: TemplateProd-Test-w19d-15-0
+    stackName: "$(Gate.VersionClean)"
+    version: w19d-15-0
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: ProductionStage
+    stageName: ProductionTestsw19d150j
+    stageDisplayname: Production Tests w19d-15-0j
+    jobName: ProductionTestsw19d150j
+    jobDisplayname: Production Tests w19d-15-0j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    msiURL: $(msiURLJPNLatest)
+    osName: Windows Server 2019 JPN
+    requestedServiceObjectiveName: S4
+    resourceGroup: TemplateProd-Test-w19d-15-0j
+    SqlDeploymentName: TemplateProd-Test-w19d-15-0j
+    stackName: "$(Gate.VersionClean)"
+    version: w19d-15-0j
