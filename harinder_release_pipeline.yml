@@ -55,7 +55,7 @@ stages:
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    csmFile: mainTemplate.json
+    csmFileCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/Solution Template/mainTemplate.json
     databaseNewOrExisting: new
     # databaseType: MYSQL
     lansaVersion: V14 SP2
@@ -76,7 +76,7 @@ stages:
     jobName: AUSSQLAZURE3DBw16d142
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
-    csmFile: mainTemplate.json
+    csmFileCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/Solution Template/mainTemplate.json
     databaseNewOrExisting: new
     # databaseType: MYSQL
     lansaVersion: V14 SP2
@@ -87,6 +87,8 @@ stages:
     SqlDeploymentName: SQLAZURE3
     stackName: SQL3VMSS
     version: w19d-14-2
+
+
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
@@ -144,8 +146,8 @@ stages:
     jobName: AUSMYSQL1DBw19d150
     jobDisplayname: AUS MYSQL1 DB w19d-15-0
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-    csmFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
-    csmParametersFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+    csmFileCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+    csmParametersCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
     databaseNewOrExisting: existing
     lansaVersion: V15 GA
     msiURL: $(msiURLv15)
@@ -167,8 +169,8 @@ stages:
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     applicationGatewaySkuName: WAF_Medium
     applicationGatewaySkuTier: WAF
-    csmFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
-    csmParametersFileMySQL1DB: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
+    csmFileCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlTemplate.json
+    csmParametersCommon: $(Pipeline.Workspace)/_lansa_azure_quickstart_templates/Solution Template/DatabaseDeploymentTemplates/mysqlParameters.json
     databaseNewOrExisting: existing
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)

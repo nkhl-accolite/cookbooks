@@ -25,15 +25,15 @@ parameters:
   - name: csmParametersFile
     type: string
     default: ''
-  - name: csmFileMySQL1DB
+  - name: csmFileCommon
     type: string
     default: ''
-  - name: csmParametersFileMySQL1DB
+  - name: csmParametersCommon
     type: string
     default: ''
-  - name: overrideParameters
-    type: string
-    default: ''
+  # - name: overrideParametersCommon
+  #   type: string
+  #   default: ''
   - name: stackName
     type: string
     default: ''
@@ -93,8 +93,15 @@ stages:
     - job: ${{ parameters.jobName }}
       timeoutInMinutes: 120
       variables:
-        ResourceGroup: ${{ parameters.resourceGroup }}
-        imageReleaseState: 'Production'
+        - name: ResourceGroup
+          value: ${{ parameters.resourceGroup }}
+        - name: imageReleaseState
+          value: 'Production'
+        - name: overrideParametersCommon
+          ${{ if or(ne(parameters.stageName, 'AUSMYSQL1DBw19d150'), ne(parameters.stageName, 'AUSMSSQLS1DBw19d142')) }}:
+            value: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "$(msiURLv142)" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "Standard" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
+          ${{ else }}:
+            value: ''
         
       cancelTimeoutInMinutes: 1
       condition: ${{ parameters.jobcondition}}
@@ -151,10 +158,10 @@ stages:
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
             location: 'Australia East'
-            csmFile: ${{ parameters.csmFileMySQL1DB}}
-            csmParametersFile: ${{ parameters.csmParametersFileMySQL1DB }}
+            csmFile: ${{ parameters.csmFileCommon}}
+            csmParametersFile: ${{ parameters.csmParametersCommon }}
             deploymentName: ${{ parameters.SqlDeploymentName }}
-            overrideParameters: ${{ parameters.overrideParameters }}
+            overrideParameters: $(overrideParametersCommon)
             deploymentOutputs: deploymentOutput_common
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
