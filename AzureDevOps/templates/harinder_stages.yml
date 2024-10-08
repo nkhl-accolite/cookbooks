@@ -138,7 +138,7 @@ stages:
           displayName: 'Artifact Check : Output Gate Variable'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
-          - pwsh: Write-Host $(overrideParametersCommon)
+        - pwsh: Write-Host $(overrideParametersCommon)
 
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
