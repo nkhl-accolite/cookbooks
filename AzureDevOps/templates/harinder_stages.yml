@@ -123,7 +123,7 @@ stages:
         - checkout: self
           path: _robe070_cookbooks
 
-        - pwsh: Write-Host $(overrideParametersCommon)
+
         - task: PowerShell@2
           name: Gate
           displayName: 'Artifact Check: Set Gate Variable'
@@ -137,6 +137,8 @@ stages:
             Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
           displayName: 'Artifact Check : Output Gate Variable'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+          - pwsh: Write-Host $(overrideParametersCommon)
 
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
