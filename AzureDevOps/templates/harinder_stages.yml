@@ -19,28 +19,10 @@ parameters:
   - name: jobcondition
     type: string
     default: none
-  - name: csmFile
-    type: string
-    default: ''
-  - name: csmParametersFile
-    type: string
-    default: ''
-  - name: csmFileCommon
-    type: string
-    default: ''
-  - name: csmParametersCommon
-    type: string
-    default: ''
-  # - name: overrideParametersCommon
-  #   type: string
-  #   default: ''
   - name: stackName
     type: string
     default: ''
   - name: SqlDeploymentName
-    type: string
-    default: none
-  - name: deploymentOutputs
     type: string
     default: none
   - name: resourceGroup
@@ -58,19 +40,10 @@ parameters:
   - name: databaseType  
     type: string
     default: none
-  - name: edition  
-    type: string
-    default: ''
   - name: requestedServiceObjectiveName  
     type: string
     default: ''
   - name: msiURL  
-    type: string
-    default: none
-  - name: databaseName  
-    type: string
-    default: none
-  - name: databaseLogin  
     type: string
     default: none
   - name: databaseNewOrExisting
@@ -177,7 +150,7 @@ stages:
             displayName: 'Azure Resource Group Tagging db'
             inputs:
               ConnectedServiceName: 'Azure Baking Images'
-              ResourceGroupName: ${{ parameters.resourceGroup }}
+              ResourceGroupName: $(ResourceGroup)
               Key: Usage
               Value: 'test-temp'
             continueOnError: true
