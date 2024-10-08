@@ -110,8 +110,8 @@ stages:
             Inline: |
               Write-Host "Deleting Resource Group $(ResourceGroup)"
               Remove-AzResourceGroup -Name $(ResourceGroup) -Force
-              errorActionPreference: silentlyContinue
-              azurePowerShellVersion: LatestVersion
+            errorActionPreference: silentlyContinue
+            azurePowerShellVersion: LatestVersion
           continueOnError: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
