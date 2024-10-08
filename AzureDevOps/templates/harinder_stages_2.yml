@@ -148,7 +148,7 @@ stages:
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
           inputs:
-            azureSubscription: 
+            azureSubscription: $(ConnectedServiceName)
             ScriptType: InlineScript
             Inline: |
               Write-Host "Deleting Resource Group $(ResourceGroup)"
