@@ -63,16 +63,10 @@ stages:
     - job: ${{ parameters.jobName }}
       timeoutInMinutes: 120
       variables:
-        - name: ResourceGroup
-          value: ${{ parameters.resourceGroup }}
-        - name: imageReleaseState
-          value: 'Production'
-        - name: overrideParametersCommon
-          ${{ if or(ne(parameters.stageName, 'AUSMYSQL1DBw19d150'), ne(parameters.stageName, 'AUSMSSQLS1DBw19d142')) }}:
-            value: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "$(msiURLv142)" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "Standard" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
-          ${{ else }}:
-            value: ''
-        
+        ResourceGroup: ${{ parameters.resourceGroup }}
+        imageReleaseState: 'Production'
+        ConnectedServiceName: 'Azure Baking Images'
+
       cancelTimeoutInMinutes: 1
       condition: ${{ parameters.jobcondition}}
       displayName: ${{ parameters.jobDisplayname }}
@@ -111,13 +105,13 @@ stages:
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
           inputs:
-            azureSubscription: 
+            azureSubscription: $(ConnectedServiceName)
             ScriptType: InlineScript
             Inline: |
               Write-Host "Deleting Resource Group $(ResourceGroup)"
               Remove-AzResourceGroup -Name $(ResourceGroup) -Force
-            errorActionPreference: silentlyContinue
-            azurePowerShellVersion: LatestVersion
+              errorActionPreference: silentlyContinue
+              azurePowerShellVersion: LatestVersion
           continueOnError: true
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
@@ -125,7 +119,7 @@ stages:
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
           name: sqlazuredeployment
           inputs:
-            azureResourceManagerConnection: 'Azure Baking Images'
+            azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
             location: 'Australia East'
@@ -146,7 +140,7 @@ stages:
           - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
             displayName: 'Azure Resource Group Tagging db'
             inputs:
-              ConnectedServiceName: 'Azure Baking Images'
+              ConnectedServiceName: $(ConnectedServiceName)
               ResourceGroupName: $(ResourceGroup)
               Key: Usage
               Value: 'test-temp'
@@ -156,7 +150,7 @@ stages:
         - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
           displayName: 'Azure Resource Group Tagging'
           inputs:
-            ConnectedServiceName: 'Azure Baking Images'
+            ConnectedServiceName: $(ConnectedServiceName)
             ResourceGroupName: '$(ResourceGroup)'
             Key: Usage
             Value: 'test-temp'
@@ -174,7 +168,7 @@ stages:
         - task: AzurePowerShell@5
           displayName: 'Test Image Version'
           inputs:
-            azureSubscription: 'Azure Baking Images'
+            azureSubscription: $(ConnectedServiceName)
             ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
             ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
@@ -183,7 +177,7 @@ stages:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Delete Resource Group'
           inputs:
-            azureResourceManagerConnection: 'Azure Baking Images'
+            azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             action: DeleteRG
             resourceGroupName: '$(ResourceGroup)'
