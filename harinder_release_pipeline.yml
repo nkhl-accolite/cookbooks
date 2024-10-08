@@ -56,7 +56,6 @@ stages:
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
-    databaseType: MYSQL
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
     osName: Windows Server 2019
@@ -76,7 +75,6 @@ stages:
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
-    databaseType: MYSQL
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
     osName: Windows Server 2016
