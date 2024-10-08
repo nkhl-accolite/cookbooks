@@ -87,7 +87,6 @@ stages:
         - checkout: self
           path: _robe070_cookbooks
 
-
         - task: PowerShell@2
           name: Gate
           displayName: 'Artifact Check: Set Gate Variable'
@@ -101,6 +100,13 @@ stages:
             Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
           displayName: 'Artifact Check : Output Gate Variable'
           condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+
+        - ${{ if startsWith(parameters.stageName, 'Production') }}:
+          - powershell: |
+              # This is to replace the main template from the release URL
+              Invoke-WebRequest -Uri "$(LansaReleaseTemplateUrl)" -OutFile "$(System.DefaultWorkingDirectory)/_TemplatesCI/Solution Template/mainTemplate.json" -verbose
+            displayName: 'Download from Azure Quick Start Template'
+            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
 
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
