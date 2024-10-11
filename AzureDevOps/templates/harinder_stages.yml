@@ -69,16 +69,12 @@ parameters:
     default: Standard
   - name: serverlessDbCapacity
     type: number
-    default: ''
   - name: dbMinCapacity
     type: number
-    default: ''
   - name: maxSizeBytes
     type: number
-    default: ''
   - name: applicationGatewayCapacity
     type: number
-    default: ''
 
 
 stages:
