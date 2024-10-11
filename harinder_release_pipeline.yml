@@ -46,7 +46,7 @@ stages:
 #     deploymentOutputs: SQLAZURE1-deploymentOutput
 #     resourceGroup: SQLAZURE1-TEST
 
-    
+#1
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -65,7 +65,7 @@ stages:
     stackName: SQL2VMSS
     version: w19d-14-2
 
-
+#2
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -85,55 +85,71 @@ stages:
     version: w19d-14-2
 
 
+# #3
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSSQLAZURE4DBw19d150 
+    stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
+    jobName: AUSSQLAZURE4DBw19d150 
+    jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True'))) 
+    applicationGatewaySkuTier: WAF
+    applicationGatewaySkuName: WAF_Medium
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    msiURL: $(msiURLv15)
+    osName: Windows Server 2019 
+    requestedServiceObjectiveName: S12
+    resourceGroup: SQLAZURE4-TEST 
+    SqlDeploymentName: SQLAZURE4
+    stackName: SQL4VMSS
+    version: w19d-15-0 
+
+# #4
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSSQLAZURE5DBw16d150 
+    stageDisplayname: AUS SQLAZURE5 DB w16d-15-0
+    jobName: AUSSQLAZURE5DBw16d150 
+    jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True'))) 
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    applicationGatewaySkuTier: WAF
+    applicationGatewaySkuName: WAF_Large
+    msiURL: $(msiURLv15)
+    osName: Windows Server 2016 
+    requestedServiceObjectiveName: P1
+    resourceGroup: SQLAZURE5-TEST 
+    SqlDeploymentName: SQLAZURE5
+    stackName: SQL5VMSS
+    version:  w16d-15-0 
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
 #     dependsOn: 
-#     stageName: AUSSQLAZURE4DBw19d150
-#     stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
-#     jobName: AUSSQLAZURE4DBw19d150
-#     jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-#     version: w19d-15-0
-#     stackName: SQL4VMSS
-#     osName: Windows Server 2019
-#     SqlDeploymentName: SQLAZURE4
-#     deploymentOutputs: SQLAZURE4-deploymentOutput
-#     resourceGroup: SQLAZURE4-TEST
+#     stageName: AUSSQLAZURE6DBw22r2d150 
+#     stageDisplayname: AUS SQLAZURE6 DB w22r2d-15-0
+#     jobName: AUSSQLAZURE6DBw12r2d150 
+#     jobDisplayname: AUS SQLAZURE6 DB w22r2d-15-0
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     databaseNewOrExisting: new
+#     edition: Premium
+#     lansaVersion: V15 GA
 #     applicationGatewaySkuTier: WAF
-#     applicationGatewaySkuName: WAF_Medium
-#     requestedServiceObjectiveName: S12
+#     applicationGatewaySkuName: WAF_Large
 #     msiURL: $(msiURLv15)
-
-# - template: AzureDevOps\templates\harinder_stages.yml
-#   parameters:
-#     dependsOn: 
-#     stageName: AUSSQLAZURE5DBw16d150
-#     stageDisplayname: AUS SQLAZURE5 DB w16d-15-0
-#     jobName: AUSSQLAZURE5DBw16d150
-#     jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-#     version: w16d-15-0
-#     osName: Windows Server 2016
-#     SqlDeploymentName: SQLAZURE5
-#     deploymentOutputs: SQLAZURE5-deploymentOutput
-#     resourceGroup: SQLAZURE5-TEST
-
-# - template: AzureDevOps\templates\harinder_stages.yml
-#   parameters:
-#     dependsOn: 
-#     stageName: AUSSQLAZURE6DBw12r2d150
-#     stageDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
-#     jobName: AUSSQLAZURE6DBw12r2d150
-#     jobDisplayname: AUS SQLAZURE6 DB w12r2d-15-0
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
-#     version: w22r2d-15-0
-#     osName: Windows Server 2022
-#     SqlDeploymentName: SQLAZURE6
-#     deploymentOutputs: SQLAZURE6-deploymentOutput
+#     osName: Windows Server 2012
+#     requestedServiceObjectiveName: P11
 #     resourceGroup: SQLAZURE6-TEST
+#     SqlDeploymentName: SQLAZURE5
+#     stackName: SQL6VMSS
+#     version: w12r2d-15-0
+    
 
-
+# 6
 - template: AzureDevOps\templates\harinder_stages_2.yml
   parameters:
     dependsOn: 
@@ -153,6 +169,7 @@ stages:
     stackName: MYSQLVMSS
     version: w19d-15-0
 
+# 7
 - template: AzureDevOps\templates\harinder_stages_2.yml
   parameters:
     dependsOn: 
@@ -172,23 +189,165 @@ stages:
     stackName: MSSQLVMSS
     version: w19d-15-0
 
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSDevShoe_WithKeyVaultCert_Sizesw19d150 
+    stageDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
+    jobName: AUSDevShoe_WithKeyVaultCert_Sizesw19d150 
+    jobDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    applicationGatewaySkuTier: WAF
+    applicationGatewaySkuName: WAF_Large
+    msiURL: $(msiURLv15)
+    osName: "$(Gate.osName)"
+    requestedServiceObjectiveName: P1
+    resourceGroup: SQLAZURE5-TEST 
+    SqlDeploymentName: DevStack
+    stackName: DevSt
+    version: w19d-15-0
+    imageReleaseState: $(imageReleaseState)
+    virtualMachineSize: Standard_B4ms
+    dbVirtualMachineSize: Standard_B2ms
+    keyVaultEnabled: false
+    edition: Serverless
+    serverlessDbCapacity: 1
+    dbMinCapacity: 0.5
+    maxSizeBytes: 10737418240
+    applicationGatewayCapacity: 1
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
+    stageDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
+    jobName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
+    jobDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLJPN)
+    osName: Windows Server 2016 JPN 
+    requestedServiceObjectiveName: S2
+    resourceGroup: TestStack-TEST 
+    SqlDeploymentName: TestStack
+    stackName: TestSt
+    version:  w16d-14-2j 
+    imageReleaseState: $(imageReleaseState)
+    virtualMachineSize: Standard_B4ms
+    dbVirtualMachineSize: Standard_B2ms
+    keyVaultEnabled: true
+    edition: Serverless
+    serverlessDbCapacity: 4
+    dbMinCapacity: 0.5
+    maxSizeBytes: 107374182400
+    applicationGatewayCapacity: 2
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSSmallStackShoeSizesw19d150j
+    stageDisplayname: AUS Small Stack Shoe Sizes w19d-15-0j
+    jobName: AUSSmallStackShoeSizesw19d150j
+    jobDisplayname: AUS Small Stack Shoe Sizes w19d-15-0j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    msiURL: $(msiURLJPNLatest)
+    osName: Windows Server 2019 JPN 
+    requestedServiceObjectiveName: S4
+    resourceGroup: SmallStack-TEST 
+    SqlDeploymentName: SmallStack
+    stackName: SmallSt
+    version:  w19d-15-0j
+    imageReleaseState: $(imageReleaseState)
+    virtualMachineSize: Standard_B4ms
+    dbVirtualMachineSize: Standard_B2ms
+    keyVaultEnabled: false
+    serverlessDbCapacity: 1
+    dbMinCapacity: 0
+    maxSizeBytes: 536870912000
+    applicationGatewayCapacity: 2
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSMediumStackShoeSizesw16d150j
+    stageDisplayname: AUS Medium Stack Shoe Sizes w16d-15-0j
+    jobName: AUSMediumStackShoeSizesw16d150j
+    jobDisplayname: AUS Medium Stack Shoe Sizes w16d-15-0j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: New 
+    lansaVersion: V15 GA
+    msiURL: $(msiURLJPNLatest)
+    osName: Windows Server 2016 JPN 
+    requestedServiceObjectiveName: S12
+    resourceGroup: MediumStack-TEST 
+    SqlDeploymentName: MediumStack
+    stackName: MedSt
+    version:  w16d-15-0j
+    imageReleaseState: $(imageReleaseState)
+    virtualMachineSize: Standard_B12ms
+    dbVirtualMachineSize: Standard_B2ms
+    keyVaultEnabled: false
+    serverlessDbCapacity: 1
+    dbMinCapacity: 0
+    maxSizeBytes: 1099511627776
+    applicationGatewayCapacity: 2
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: 
+    stageName: AUSLargeStackShoeSizesw19d142j
+    stageDisplayname: AUS Large Stack Shoe Sizes w19d-14-2j
+    jobName: AUSLargeStackShoeSizesw19d142j
+    jobDisplayname: AUS Large Stack Shoe Sizes w19d-14-2j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2j'], 'True'), eq(variables['Build-all'], 'True')))  
+    databaseNewOrExisting: New
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLJPN)
+    osName: Windows Server 2019 JPN 
+    requestedServiceObjectiveName: P1
+    resourceGroup: LargeStack-TEST 
+    SqlDeploymentName: LargeStack
+    stackName: LargeSt
+    version:  w19d-14-2j
+    imageReleaseState: $(imageReleaseState)
+    virtualMachineSize: Standard_B20ms
+    dbVirtualMachineSize: Standard_B2ms
+    keyVaultEnabled: false
+    serverlessDbCapacity: 1
+    dbMinCapacity: 0
+    maxSizeBytes: 1099511627776
+    applicationGatewayCapacity: 2
+
 - stage: ProductionStage
   displayName: Production Stage
-  dependsOn: 
-    - AUSMSSQLS1DBw19d142
-    - AUSMYSQL1DBw19d150
-    - AUSSQLAZURE3DBw16d142
+  dependsOn:
     - AUSSQLAZURE2DBw19d142
+    - AUSSQLAZURE3DBw16d142
+    - AUSSQLAZURE4DBw19d150
+    - AUSSQLAZURE5DBw16d150
+    - AUSSQLAZURE6DBw22r2d150
+    - AUSMYSQL1DBw19d150
+    - AUSMSSQLS1DBw19d142
+    - AUSDevShoe_WithKeyVaultCert_Sizesw19d150
+    - AUSTestShoe_WithKeyVaultCert_Sizesw16142j
+    - AUSSmallStackShoeSizesw19d150j
+    - AUSMediumStackShoeSizesw16d150j
+    - AUSLargeStackShoeSizesw19d142j
   jobs: 
   - job: AgentlessJob
     displayName: 'Manual Intervention: Deploy Template'
     pool: server
     steps:
-    - task: ManualIntervention@8
-      displayName: 'Manual Intervention: Production Template'
+    - task: ManualValidation@0
+      displayName: 'Manual Validation: Production Template'
       inputs:
-        instructions: |
-          Deploy the template to the Production Stage
+        instructions: "Deploy the template to the Production Stage"
+      onTimeout: 'reject'
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -200,7 +359,7 @@ stages:
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
-    msiURL: $(msiURL)
+    msiURL: $(msiURLv15)
     osName: Windows Server 2019
     requestedServiceObjectiveName: S4
     resourceGroup: TemplateProd-Test-w19d-15-0
@@ -225,6 +384,60 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w19d-15-0j
     stackName: "$(Gate.VersionClean)"
     version: w19d-15-0j
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: ProductionStage
+    stageName: ProductionTestsw16d150j
+    stageDisplayname: Production Tests w16d-15-0j
+    jobName: ProductionTestsw16d150j
+    jobDisplayname: Production Tests w16d-15-0j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V15 GA
+    msiURL: $(msiURLJPNLatest)
+    osName: Windows Server 2016 JPN
+    requestedServiceObjectiveName: S12
+    resourceGroup: TemplateProd-Test-w16d-15-0j
+    SqlDeploymentName: TemplateProd-Test-w16d-15-0j
+    stackName: "$(Gate.VersionClean)"
+    version: w16d-15-0j
+
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: ProductionStage
+    stageName: ProductionTestsw16d142j
+    stageDisplayname: Production Tests w16d-14-2j
+    jobName: ProductionTestsw16d142j
+    jobDisplayname: Production Tests w16d-14-2j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLJPN)
+    osName: Windows Server 2016 JPN
+    requestedServiceObjectiveName: S12
+    resourceGroup: TemplateProd-Test-w16d-14-2j
+    SqlDeploymentName: TemplateProd-Test-w16d-14-2j
+    stackName: "$(Gate.VersionClean)"
+    version: w16d-14-2j
+  
+- template: AzureDevOps\templates\harinder_stages.yml
+  parameters:
+    dependsOn: ProductionStage
+    stageName: ProductionTestsw19d142j
+    stageDisplayname: Production Tests w19d-14-2j
+    jobName: ProductionTestsw19d142j
+    jobDisplayname: Production Tests w19d-14-2j
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    databaseNewOrExisting: new
+    lansaVersion: V14 SP2
+    msiURL: $(msiURLJPN)
+    osName: Windows Server 2016 JPN
+    requestedServiceObjectiveName: S4
+    resourceGroup: TemplateProd-Test-w19d-14-2
+    SqlDeploymentName: TemplateProd-Test-w19d-14-2
+    stackName: "$(Gate.VersionClean)"
+    version: w16d-14-2j
 
 - stage: TagAzureQuickstartTemplatesRepo
   dependsOn:

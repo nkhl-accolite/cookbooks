@@ -31,18 +31,12 @@ parameters:
   - name: csmParametersCommon
     type: string
     default: ''
-  # - name: overrideParametersCommon
-  #   type: string
-  #   default: ''
   - name: stackName
     type: string
     default: ''
   - name: SqlDeploymentName
     type: string
-    default: none
-  - name: deploymentOutputs
-    type: string
-    default: none
+    default: deploymentName
   - name: resourceGroup
     type: string
     default: none
@@ -60,7 +54,7 @@ parameters:
     default: none
   - name: edition  
     type: string
-    default: ''
+    default: Standard
   - name: requestedServiceObjectiveName  
     type: string
     default: ''
@@ -83,9 +77,9 @@ parameters:
     type: string
     default: Standard_v2
 
-
 stages:
   - stage: ${{ parameters.stageName }}
+    condition: ${{ ne(parameters.stageName, 'AUSMYSQL1DBw19d150') }} # Will run only if the stage isn't AUSMYSQL1DBw19d150, because MYSQL Single Server is no longer supported on Azure
     dependsOn: '${{ parameters.dependsOn }}'
     displayName: ${{ parameters.stageDisplayname }}
     jobs:
@@ -195,7 +189,7 @@ stages:
               resourceGroupName: '$(ResourceGroup)'
               location: 'Australia East'
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
-              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa" -databaseLoginPassword "$(databaseLoginPassword)" -edition "Standard" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
+              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
               deploymentName: MYSQL
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
@@ -227,7 +221,7 @@ stages:
               resourceGroupName: '$(ResourceGroup)'
               location: 'Australia East'
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
-              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -edition "Standard" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -agpublicIpDns "lansaag"'
+              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -agpublicIpDns "lansaag"'
               deploymentName: MSSQLS
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
