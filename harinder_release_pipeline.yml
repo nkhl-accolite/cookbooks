@@ -347,7 +347,7 @@ stages:
       displayName: 'Manual Validation: Production Template'
       inputs:
         instructions: "Deploy the template to the Production Stage"
-      onTimeout: 'reject'
+        onTimeout: 'reject'
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
