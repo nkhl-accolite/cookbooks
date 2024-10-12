@@ -193,9 +193,9 @@ stages:
   parameters:
     dependsOn: 
     stageName: AUSDevShoe_WithKeyVaultCert_Sizesw19d150 
-    stageDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
+    stageDisplayname: AUS Dev Shoe (With Key Vault Cert) Sizes w19d-15-0
     jobName: AUSDevShoe_WithKeyVaultCert_Sizesw19d150 
-    jobDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
+    jobDisplayname: AUS Dev Shoe (With Key Vault Cert) Sizes w19d-15-0
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
@@ -222,9 +222,9 @@ stages:
   parameters:
     dependsOn: 
     stageName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
-    stageDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
+    stageDisplayname: AUS Test Shoe (With Key Vault Cert) Sizes w16-14-2j
     jobName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
-    jobDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
+    jobDisplayname: AUS Test Shoe (With Key Vault Cert) Sizes w16-14-2j
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
