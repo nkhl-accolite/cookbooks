@@ -121,26 +121,28 @@ stages:
         vmImage: ${{ parameters.vmImage }}
 
       steps:
-        - download: _TemplatesCI
-          displayName: Download artefacts from Template CI 3.0
-        - download: _BuildImageReleaseArtefacts
-          displayName: Download artefacts from Build Image Release Artefacts 3.0
-        - checkout: _lansa_azure_quickstart_templates
-          path: _lansa_azure_quickstart_templates
+        # - download: _TemplatesCI
+        #   displayName: Download artefacts from Template CI 3.0
+        # - download: _BuildImageReleaseArtefacts
+        #   displayName: Download artefacts from Build Image Release Artefacts 3.0
+        # - checkout: _lansa_azure_quickstart_templates
+        #   path: _lansa_azure_quickstart_templates
         # - checkout: _robe070_cookbooks
         #   path: _robe070_cookbooks
         - checkout: self
           path: _robe070_cookbooks
 
-        - pwsh: write-host "overrideParameters = $(overrideParameters)"
 
-        # - task: PowerShell@2
-        #   name: Gate
-        #   displayName: 'Artifact Check: Set Gate Variable'
-        #   inputs:
-        #     targetType: filePath
-        #     filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
-        #     arguments: '-Version "${{ parameters.version }}" -osName "${{ parameters.osName }}"'
+
+        - task: PowerShell@2
+          name: Gate
+          displayName: 'Artifact Check: Set Gate Variable'
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
+            arguments: '-Version "${{ parameters.version }}" -osName "${{ parameters.osName }}"'
+
+        - pwsh: write-host "overrideParameters = $(overrideParameters)"
 
         # - powershell: |
         #     # Print the Gate variables. 
