@@ -202,7 +202,7 @@ stages:
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Large
     msiURL: $(msiURLv15)
-    osName: "$(Gate.osName)"
+    osName: Windows Server 2019
     requestedServiceObjectiveName: P1
     resourceGroup: SQLAZURE5-TEST 
     SqlDeploymentName: DevStack
