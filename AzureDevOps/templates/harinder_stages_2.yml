@@ -79,7 +79,7 @@ parameters:
 
 stages:
   - stage: ${{ parameters.stageName }}
-    condition: ${{ ne(parameters.stageName, 'AUSMYSQL1DBw19d150') }} # Will run only if the stage isn't AUSMYSQL1DBw19d150, because MYSQL Single Server is no longer supported on Azure
+    condition: ${{ ne(lower(parameters.stageName), 'ausmysql1dbw19d150') }} # Will run only if the stage isn't AUSMYSQL1DBw19d150, because MYSQL Single Server is no longer supported on Azure
     dependsOn: '${{ parameters.dependsOn }}'
     displayName: ${{ parameters.stageDisplayname }}
     jobs:
@@ -91,14 +91,14 @@ stages:
         - name: imageReleaseState
           value: 'Production'
         - name: csmFile
-          ${{ if eq( parameters.stageName, 'AUSMYSQL1DBw19d150' ) }}:
+          ${{ if eq( lower(parameters.stageName), 'ausmysql1dbw19d150' ) }}:
             value: mysqlTemplate.json
-          ${{ if eq( parameters.stageName, 'AUSMSSQLS1DBw19d142' ) }}:
+          ${{ if eq( lower(parameters.stageName), 'ausmssqls1dbw19d142' ) }}:
             value: sqlServerTemplate.json
         - name: csmParametersFile
-          ${{ if eq( parameters.stageName, 'AUSMYSQL1DBw19d150' ) }}:
+          ${{ if eq( lower(parameters.stageName), 'ausmysql1dbw19d150' ) }}:
             value: mysqlParameters.json
-          ${{ if eq( parameters.stageName, 'AUSMSSQLS1DBw19d142' ) }}:
+          ${{ if eq( lower(parameters.stageName), 'ausmssqls1dbw19d142' ) }}:
             value: sqlServerParameters.json
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
@@ -134,7 +134,7 @@ stages:
             # Print the Gate variables. 
             Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
           displayName: 'Artifact Check : Output Gate Variable'
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzurePowerShell@5
           displayName: 'Delete Resource Group'
@@ -147,7 +147,7 @@ stages:
             errorActionPreference: silentlyContinue
             azurePowerShellVersion: LatestVersion
           continueOnError: true
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
@@ -162,9 +162,9 @@ stages:
             deploymentName: ${{ parameters.SqlDeploymentName }}
             deploymentOutputs: deploymentOutput_common
             addSpnToEnvironment: true
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        - ${{ if eq(parameters.stageName, 'AUSMYSQL1DBw19d150') }}:
+        - ${{ if eq( lower(parameters.stageName), 'ausmysql1dbw19d150') }}:
           - powershell: |
               # Print the Deployment Output
               Write-Host "$(deploymentOutput_common)" | out-default | Write-Verbose
@@ -174,7 +174,7 @@ stages:
               Write-Host "##vso[task.setvariable variable=serverName;isOutput=true]$serverName" | Out-Default | Write-Verbose 
             displayName: 'Get MySQL DB ServerName'
             name: mysqlDBOutput
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+            condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: 'ARM Template deployment: MySQL1DB'
@@ -188,9 +188,9 @@ stages:
               deploymentName: MYSQL
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+            condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
         
-        - ${{ if eq(parameters.stageName, 'AUSMSSQLS1DBw19d142') }}:
+        - ${{ if eq( lower(parameters.stageName), 'ausmssqls1dbw19d142') }}:
           - task: AzurePowerShell@5
             displayName: 'Azure PowerShell script: GetServerIP'
             name: sqlDBOutput
@@ -206,7 +206,7 @@ stages:
                 $vmIP = $output.IpAddress
                 Write-Host "##vso[task.setvariable variable=pip;isOutput=true]$vmIP" | Out-Default | Write-Verbose 
               azurePowerShellVersion: LatestVersion
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+            condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
           - task: AzureResourceManagerTemplateDeployment@3
             displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
@@ -220,13 +220,13 @@ stages:
               deploymentName: MSSQLS
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
-            condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+            condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - powershell: |
             # Print the Deployment Output
             Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
           displayName: 'Print Deployment Output'
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
           displayName: 'Azure Resource Group Tagging db'
@@ -236,7 +236,7 @@ stages:
             Key: Usage
             Value: 'test-temp'
           continueOnError: true
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
           displayName: 'Azure Resource Group Tagging'
@@ -246,7 +246,7 @@ stages:
             Key: Usage
             Value: 'test-temp'
           continueOnError: true
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: PowerShell@2
           displayName: 'Test ARM Deployment: URL Tests'
@@ -254,7 +254,7 @@ stages:
             targetType: filePath
             filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
             arguments: '-deploymentOutput $(deploymentOutput)'
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzurePowerShell@5
           displayName: 'Test Image Version'
@@ -263,7 +263,7 @@ stages:
             ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
             ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Delete Resource Group'
@@ -273,4 +273,4 @@ stages:
             action: DeleteRG
             resourceGroupName: '$(ResourceGroup)'
           continueOnError: true
-          condition: and(succeeded(), eq(variables['Gate.IsEnabled'], 'True'))
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))

@@ -39,7 +39,7 @@ stages:
 #     stageDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
 #     jobName: AUSSQLAZURE1DBw22r2d142
 #     jobDisplayname: AUS SQLAZURE1 DB w22r2d-14-2
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
 #     version: w22r2d-14-2
 #     osName: Windows Server 2022
 #     SqlDeploymentName: SQLAZURE1
@@ -54,7 +54,7 @@ stages:
     stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
@@ -73,7 +73,7 @@ stages:
     stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobName: AUSSQLAZURE3DBw16d142
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
@@ -93,7 +93,7 @@ stages:
     stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
     jobName: AUSSQLAZURE4DBw19d150 
     jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True'))) 
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true'))) 
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Medium
     databaseNewOrExisting: new
@@ -114,7 +114,7 @@ stages:
     stageDisplayname: AUS SQLAZURE5 DB w16d-15-0
     jobName: AUSSQLAZURE5DBw16d150 
     jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'True'), eq(variables['Build-all'], 'True'))) 
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'true'), eq(variables['Build-all'], 'true'))) 
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     applicationGatewaySkuTier: WAF
@@ -134,7 +134,7 @@ stages:
 #     stageDisplayname: AUS SQLAZURE6 DB w22r2d-15-0
 #     jobName: AUSSQLAZURE6DBw12r2d150 
 #     jobDisplayname: AUS SQLAZURE6 DB w22r2d-15-0
-#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+#     jobcondition: and(succeeded(), or(eq(variables['Build-w22r2d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
 #     databaseNewOrExisting: new
 #     edition: Premium
 #     lansaVersion: V15 GA
@@ -157,7 +157,7 @@ stages:
     stageDisplayname: AUS MYSQL1 DB w19d-15-0
     jobName: AUSMYSQL1DBw19d150
     jobDisplayname: AUS MYSQL1 DB w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: existing
     lansaVersion: V15 GA
     databaseType: MYSQL
@@ -177,7 +177,7 @@ stages:
     stageDisplayname: AUS MSSQLS1 DB w19d-14-2
     jobName: AUSMSSQLS1DBw19d142
     jobDisplayname: AUS MSSQLS1 DB w19d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
     databaseType: MSSQLS
     databaseNewOrExisting: existing
     lansaVersion: V14 SP2
@@ -196,7 +196,7 @@ stages:
     stageDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
     jobName: AUSDevShoe_WithKeyVaultCert_Sizesw19d150 
     jobDisplayname: AUS Dev Shoe(With Key Vault Cert) Sizes w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     applicationGatewaySkuTier: WAF
@@ -225,7 +225,7 @@ stages:
     stageDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
     jobName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
     jobDisplayname: AUS Test Shoe(With Key Vault Cert) Sizes w16-14-2j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLJPN)
@@ -252,7 +252,7 @@ stages:
     stageDisplayname: AUS Small Stack Shoe Sizes w19d-15-0j
     jobName: AUSSmallStackShoeSizesw19d150j
     jobDisplayname: AUS Small Stack Shoe Sizes w19d-15-0j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLJPNLatest)
@@ -278,7 +278,7 @@ stages:
     stageDisplayname: AUS Medium Stack Shoe Sizes w16d-15-0j
     jobName: AUSMediumStackShoeSizesw16d150j
     jobDisplayname: AUS Medium Stack Shoe Sizes w16d-15-0j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: New 
     lansaVersion: V15 GA
     msiURL: $(msiURLJPNLatest)
@@ -304,7 +304,7 @@ stages:
     stageDisplayname: AUS Large Stack Shoe Sizes w19d-14-2j
     jobName: AUSLargeStackShoeSizesw19d142j
     jobDisplayname: AUS Large Stack Shoe Sizes w19d-14-2j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2j'], 'True'), eq(variables['Build-all'], 'True')))  
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2j'], 'true'), eq(variables['Build-all'], 'true')))  
     databaseNewOrExisting: New
     lansaVersion: V14 SP2
     msiURL: $(msiURLJPN)
@@ -356,7 +356,7 @@ stages:
     stageDisplayname: Production Tests w19d-15-0
     jobName: ProductionTestsw19d150
     jobDisplayname: Production Tests w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLv15)
@@ -374,7 +374,7 @@ stages:
     stageDisplayname: Production Tests w19d-15-0j
     jobName: ProductionTestsw19d150j
     jobDisplayname: Production Tests w19d-15-0j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLJPNLatest)
@@ -392,7 +392,7 @@ stages:
     stageDisplayname: Production Tests w16d-15-0j
     jobName: ProductionTestsw16d150j
     jobDisplayname: Production Tests w16d-15-0j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLJPNLatest)
@@ -410,7 +410,7 @@ stages:
     stageDisplayname: Production Tests w16d-14-2j
     jobName: ProductionTestsw16d142j
     jobDisplayname: Production Tests w16d-14-2j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLJPN)
@@ -428,7 +428,7 @@ stages:
     stageDisplayname: Production Tests w19d-14-2j
     jobName: ProductionTestsw19d142j
     jobDisplayname: Production Tests w19d-14-2j
-    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'True'), eq(variables['Build-all'], 'True')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0j'], 'true'), eq(variables['Build-all'], 'true')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLJPN)
@@ -463,10 +463,10 @@ stages:
 
     - powershell: |
         # Print the Gate variables.
-        if ( $(Gate.IsEnabled) -eq 'True' ) {
+        if ( $(Gate.IsEnabled) -eq 'true' ) {
             Write-Host "Gate.IsEnabled: $(Gate.IsEnabled); Gate.ImageUrl: $(Gate.ImageUrl) Gate.Sku: $(Gate.Sku)" | Out-Default
         } else {
-         Write-Host 'Gate.IsEnabled is set to false.'
+          Write-Host 'Gate.IsEnabled is set to false.'
         }
       displayName: 'Artifact Check - Output Gate Variable'
 
