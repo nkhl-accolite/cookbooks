@@ -176,7 +176,7 @@ stages:
             location: 'Australia East'
             csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
             deploymentName: ${{ parameters.SqlDeploymentName }}
-            overrideParameters: $(Gate.osName)) ${{ variables.overrideParameters }}
+            overrideParameters: '$(Gate.osName)) ${{ variables.overrideParameters }}'
             deploymentOutputs: deploymentOutput
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
