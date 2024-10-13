@@ -124,7 +124,7 @@ stages:
     resourceGroup: SQLAZURE5-TEST 
     SqlDeploymentName: SQLAZURE5
     stackName: SQL5VMSS
-    version:  w16d-15-0 
+    version: w16d-15-0 
 
 # - template: AzureDevOps\templates\harinder_stages.yml
 #   parameters:
@@ -232,7 +232,7 @@ stages:
     resourceGroup: TestStack-TEST 
     SqlDeploymentName: TestStack
     stackName: TestSt
-    version:  w16d-14-2j 
+    version: w16d-14-2j 
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
@@ -259,7 +259,7 @@ stages:
     resourceGroup: SmallStack-TEST 
     SqlDeploymentName: SmallStack
     stackName: SmallSt
-    version:  w19d-15-0j
+    version: w19d-15-0j
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
@@ -284,7 +284,7 @@ stages:
     resourceGroup: MediumStack-TEST 
     SqlDeploymentName: MediumStack
     stackName: MedSt
-    version:  w16d-15-0j
+    version: w16d-15-0j
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B12ms
     dbVirtualMachineSize: Standard_B2ms
@@ -309,7 +309,7 @@ stages:
     resourceGroup: LargeStack-TEST 
     SqlDeploymentName: LargeStack
     stackName: LargeSt
-    version:  w19d-14-2j
+    version: w19d-14-2j
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B20ms
     dbVirtualMachineSize: Standard_B2ms
