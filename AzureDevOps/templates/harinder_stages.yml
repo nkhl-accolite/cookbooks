@@ -173,45 +173,45 @@ stages:
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - powershell: |
-        #     # Print the Deployment Output
-        #     Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
-        #   displayName: 'Print Deployment Output'
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - powershell: |
+            # Print the Deployment Output
+            Write-Host "$(deploymentOutput)" | out-default | Write-Verbose
+          displayName: 'Print Deployment Output'
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
-        #   displayName: 'Azure Resource Group Tagging'
-        #   inputs:
-        #     ConnectedServiceName: $(ConnectedServiceName)
-        #     ResourceGroupName: '$(ResourceGroup)'
-        #     Key: Usage
-        #     Value: 'test-temp'
-        #   continueOnError: true
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - task: maikvandergaag.maikvandergaag-azurergtag.azurergtag.azurergtag@1
+          displayName: 'Azure Resource Group Tagging'
+          inputs:
+            ConnectedServiceName: $(ConnectedServiceName)
+            ResourceGroupName: '$(ResourceGroup)'
+            Key: Usage
+            Value: 'test-temp'
+          continueOnError: true
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - task: PowerShell@2
-        #   displayName: 'Test ARM Deployment: URL Tests'
-        #   inputs:
-        #     targetType: filePath
-        #     filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
-        #     arguments: '-deploymentOutput $(deploymentOutput)'
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - task: PowerShell@2
+          displayName: 'Test ARM Deployment: URL Tests'
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
+            arguments: '-deploymentOutput $(deploymentOutput)'
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - task: AzurePowerShell@5
-        #   displayName: 'Test Image Version'
-        #   inputs:
-        #     azureSubscription: $(ConnectedServiceName)
-        #     ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
-        #     ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
-        #     azurePowerShellVersion: LatestVersion
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - task: AzurePowerShell@5
+          displayName: 'Test Image Version'
+          inputs:
+            azureSubscription: $(ConnectedServiceName)
+            ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
+            ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
+            azurePowerShellVersion: LatestVersion
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - task: AzureResourceManagerTemplateDeployment@3
-        #   displayName: 'Delete Resource Group'
-        #   inputs:
-        #     azureResourceManagerConnection: $(ConnectedServiceName)
-        #     subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
-        #     action: DeleteRG
-        #     resourceGroupName: '$(ResourceGroup)'
-        #   continueOnError: true
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - task: AzureResourceManagerTemplateDeployment@3
+          displayName: 'Delete Resource Group'
+          inputs:
+            azureResourceManagerConnection: $(ConnectedServiceName)
+            subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+            action: DeleteRG
+            resourceGroupName: '$(ResourceGroup)'
+          continueOnError: true
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
