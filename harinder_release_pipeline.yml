@@ -375,6 +375,7 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w19d-15-0
     stackName: "$(Gate.VersionClean)"
     version: w19d-15-0
+    gateOSName: $(Gate.osName)
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -393,6 +394,7 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w19d-15-0j
     stackName: "$(Gate.VersionClean)"
     version: w19d-15-0j
+    gateOSName: $(Gate.osName)
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -411,6 +413,7 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w16d-15-0j
     stackName: "$(Gate.VersionClean)"
     version: w16d-15-0j
+    gateOSName: $(Gate.osName)
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -429,6 +432,7 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w16d-14-2j
     stackName: "$(Gate.VersionClean)"
     version: w16d-14-2j
+    gateOSName: $(Gate.osName)
   
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -447,6 +451,8 @@ stages:
     SqlDeploymentName: TemplateProd-Test-w19d-14-2
     stackName: "$(Gate.VersionClean)"
     version: w16d-14-2j
+    gateOSName: $(Gate.osName)
+    
 
 - stage: TagAzureQuickstartTemplatesRepo
   dependsOn:
