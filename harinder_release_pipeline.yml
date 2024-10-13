@@ -172,7 +172,6 @@ stages:
     SqlDeploymentName: mysql1Test
     stackName: MYSQLVMSS
     version: w19d-15-0
-    gateOSName: $(Gate.osName)
 
 # 7
 - template: AzureDevOps\templates\harinder_stages_2.yml
@@ -193,7 +192,6 @@ stages:
     SqlDeploymentName: mssqls1Test
     stackName: MSSQLVMSS
     version: w19d-15-0
-    gateOSName: $(Gate.osName)
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
