@@ -148,18 +148,23 @@ stages:
             displayName: 'Download from Azure Quick Start Template'
             condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        # - task: AzurePowerShell@5
-        #   displayName: 'Delete Resource Group'
-        #   inputs:
-        #     azureSubscription: $(ConnectedServiceName)
-        #     ScriptType: InlineScript
-        #     Inline: |
-        #       Write-Host "Deleting Resource Group $(ResourceGroup)"
-        #       Remove-AzResourceGroup -Name $(ResourceGroup) -Force
-        #     errorActionPreference: silentlyContinue
-        #     azurePowerShellVersion: LatestVersion
-        #   continueOnError: true
-        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        - task: AzurePowerShell@5
+          displayName: 'Delete Resource Group'
+          inputs:
+            azureSubscription: $(ConnectedServiceName)
+            ScriptType: InlineScript
+            Inline: |
+              Write-Host "Deleting Resource Group $(ResourceGroup)"
+              Remove-AzResourceGroup -Name $(ResourceGroup) -Force
+            errorActionPreference: silentlyContinue
+            azurePowerShellVersion: LatestVersion
+          continueOnError: true
+          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        
+        # TEST ONLY - WILL BE REMOVED
+        - task: Delay@1
+          inputs:
+            delayForMinutes: '15'
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
@@ -169,9 +174,9 @@ stages:
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
             location: 'Australia East'
-            csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
+            csmFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
             deploymentName: ${{ parameters.SqlDeploymentName }}
-            overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)'
+            overrideParameters: -osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)
             deploymentOutputs: deploymentOutput
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
@@ -196,7 +201,7 @@ stages:
           displayName: 'Test ARM Deployment: URL Tests'
           inputs:
             targetType: filePath
-            filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
+            filePath: $(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1
             arguments: -deploymentOutput '$(deploymentOutput)'
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
@@ -204,7 +209,7 @@ stages:
           displayName: 'Test Image Version'
           inputs:
             azureSubscription: $(ConnectedServiceName)
-            ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
+            ScriptPath: $(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1
             ScriptArguments: -SkuName "$(Gate.Sku)" -deploymentOutput '$(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
@@ -215,6 +220,6 @@ stages:
             azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             action: DeleteRG
-            resourceGroupName: '$(ResourceGroup)'
+            resourceGroupName: $(ResourceGroup)
           continueOnError: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))

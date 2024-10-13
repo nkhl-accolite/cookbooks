@@ -128,7 +128,7 @@ stages:
           inputs:
             targetType: filePath
             filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_set_gate_variable.ps1'
-            arguments: '-Version "${{ parameters.version }}" -osName "${{ parameters.osName }}"'
+            arguments: -Version "${{ parameters.version }}" -osName "${{ parameters.osName }}"
 
         - powershell: |
             # Print the Gate variables. 
@@ -253,7 +253,7 @@ stages:
           inputs:
             targetType: filePath
             filePath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_url_tests.ps1'
-            arguments: '-deploymentOutput $(deploymentOutput)'
+            arguments: -deploymentOutput '$(deploymentOutput)'
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzurePowerShell@5
@@ -261,7 +261,7 @@ stages:
           inputs:
             azureSubscription: $(ConnectedServiceName)
             ScriptPath: '$(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1'
-            ScriptArguments: '-SkuName "$(Gate.Sku)" -deploymentOutput $(deploymentOutput)'
+            ScriptArguments: -SkuName "$(Gate.Sku)" -deploymentOutput '$(deploymentOutput)'
             azurePowerShellVersion: LatestVersion
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
