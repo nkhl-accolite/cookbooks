@@ -62,8 +62,8 @@ parameters:
     type: string
     default: ''
   - name: keyVaultEnabled
-    type: boolean
-    default: false
+    type: string
+    default: 'false'
   - name: edition  
     type: string
     default: Standard
@@ -93,15 +93,15 @@ stages:
         # imageReleaseState: 'Production'
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
-        - name: overrideParameters
+        - name: additionalOverrideParameters
           ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:
             ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
-              value: -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)"
+              value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)"
             ${{ else }}:
-              value: -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}"
+              value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}"
           ${{ else }}:
             ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
-              value: -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -collation $(Collation_JPN)
+              value: -collation $(Collation_JPN)
             ${{ else }}:
               value: ''
 
@@ -160,7 +160,7 @@ stages:
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
-          name: sqlazuredeployment
+          name: sqlazuredeployment``
           inputs:
             azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
@@ -168,7 +168,7 @@ stages:
             location: 'Australia East'
             csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
             deploymentName: ${{ parameters.SqlDeploymentName }}
-            overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(overrideParameters)'
+            overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)'
             deploymentOutputs: deploymentOutput
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))

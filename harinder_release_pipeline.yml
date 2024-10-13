@@ -210,7 +210,6 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
-    # keyVaultEnabled: false
     edition: Serverless
     serverlessDbCapacity: 1
     dbMinCapacity: 0.5
@@ -237,7 +236,7 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
-    keyVaultEnabled: true
+    keyVaultEnabled: 'true'
     edition: Serverless
     serverlessDbCapacity: 4
     dbMinCapacity: 0.5
@@ -264,7 +263,6 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
-    # keyVaultEnabled: false
     serverlessDbCapacity: 1
     dbMinCapacity: 0
     maxSizeBytes: 536870912000
@@ -290,7 +288,6 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B12ms
     dbVirtualMachineSize: Standard_B2ms
-    # keyVaultEnabled: false
     serverlessDbCapacity: 1
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
@@ -316,7 +313,6 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B20ms
     dbVirtualMachineSize: Standard_B2ms
-    # keyVaultEnabled: false
     serverlessDbCapacity: 1
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
