@@ -93,6 +93,8 @@ stages:
         # imageReleaseState: 'Production'
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
+        - name: location
+          value: 'Australia Southeast'
         - name: additionalOverrideParameters
           ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:
             ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
@@ -168,7 +170,7 @@ stages:
             azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
-            location: 'Australia East'
+            location: $(location)
             csmFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
             deploymentName: ${{ parameters.SqlDeploymentName }}
             overrideParameters: -osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)
