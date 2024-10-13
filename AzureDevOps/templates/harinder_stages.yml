@@ -160,7 +160,7 @@ stages:
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
-          name: sqlazuredeployment``
+          name: sqlazuredeployment
           inputs:
             azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
