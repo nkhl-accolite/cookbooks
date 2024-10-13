@@ -125,8 +125,8 @@ stages:
           displayName: Download artefacts from Build Image Release Artefacts 3.0
         - checkout: _lansa_azure_quickstart_templates
           path: _lansa_azure_quickstart_templates
-        - checkout: _robe070_cookbooks
-          path: _robe070_cookbooks
+        # - checkout: _robe070_cookbooks
+        #   path: _robe070_cookbooks
         - checkout: self
           path: _robe070_cookbooks
 
