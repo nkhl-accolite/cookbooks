@@ -102,6 +102,9 @@ stages:
             value: sqlServerParameters.json
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
+        - name: location
+          value: 'Australia Southeast'
+          # value: 'Australia East'
 
       cancelTimeoutInMinutes: 1
       condition: ${{ parameters.jobcondition}}
@@ -156,7 +159,7 @@ stages:
             azureResourceManagerConnection: $(ConnectedServiceName)
             subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
             resourceGroupName: '$(ResourceGroup)'
-            location: 'Australia East'
+            location: $(location)
             csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/$(csmFile)'
             csmParametersFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/DatabaseDeploymentTemplates/$(csmParametersFile)'
             deploymentName: ${{ parameters.SqlDeploymentName }}
@@ -182,7 +185,7 @@ stages:
               azureResourceManagerConnection: $(ConnectedServiceName)
               subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
               resourceGroupName: '$(ResourceGroup)'
-              location: 'Australia East'
+              location: $(location)
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
               overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
               deploymentName: MYSQL
@@ -214,7 +217,7 @@ stages:
               azureResourceManagerConnection: $(ConnectedServiceName)
               subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
               resourceGroupName: '$(ResourceGroup)'
-              location: 'Australia East'
+              location: $(location)
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
               overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}"  -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -agpublicIpDns "lansaag"'
               deploymentName: MSSQLS

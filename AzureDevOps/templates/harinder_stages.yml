@@ -90,11 +90,11 @@ stages:
       variables:
         - name: ResourceGroup
           value: ${{ parameters.resourceGroup }}
-        # imageReleaseState: 'Production'
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
         - name: location
           value: 'Australia Southeast'
+          # value: 'Australia East'
         - name: additionalOverrideParameters
           ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:
             ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
