@@ -162,9 +162,7 @@ stages:
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
         
         # TEST ONLY - WILL BE REMOVED
-        - task: Delay@1
-          inputs:
-            delayForMinutes: '15'
+        - pwsh: Start-Sleep -Seconds 900
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
