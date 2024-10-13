@@ -103,8 +103,8 @@ stages:
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
         - name: location
-          value: 'Australia Southeast'
-          # value: 'Australia East'
+          # value: 'Australia Southeast'
+          value: 'Australia East'
 
       cancelTimeoutInMinutes: 1
       condition: ${{ parameters.jobcondition}}
