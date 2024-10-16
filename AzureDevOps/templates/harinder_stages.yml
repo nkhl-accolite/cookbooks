@@ -221,12 +221,12 @@ stages:
             azurePowerShellVersion: LatestVersion
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        - task: AzureResourceManagerTemplateDeployment@3
-          inputs:
-            deploymentScope: 'Resource Group'
-            azureResourceManagerConnection: $(ConnectedServiceName)
-            subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
-            action: 'DeleteRG'
-            resourceGroupName: $(ResourceGroup)
-          continueOnError: true
-          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        # - task: AzureResourceManagerTemplateDeployment@3
+        #   inputs:
+        #     deploymentScope: 'Resource Group'
+        #     azureResourceManagerConnection: $(ConnectedServiceName)
+        #     subscriptionId: '739c4e86-bd75-4910-8d6e-d7eb23ab94f3'
+        #     action: 'DeleteRG'
+        #     resourceGroupName: $(ResourceGroup)
+        #   continueOnError: true
+        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
