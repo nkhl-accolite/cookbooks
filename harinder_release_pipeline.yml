@@ -72,6 +72,7 @@ stages:
     stageName: AUSSQLAZURE3DBw16d142
     stageDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobName: AUSSQLAZURE3DBw16d142
+    databaseNewOrExisting: new
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
     lansaVersion: V14 SP2
@@ -94,6 +95,7 @@ stages:
     jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Medium
+    databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLv15)
     osName: Windows Server 2019
@@ -113,6 +115,7 @@ stages:
     jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'true'), eq(variables['Build-all'], 'true'))) 
     lansaVersion: V15 GA
+    databaseNewOrExisting: new
     edition: Premium
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Large
@@ -212,9 +215,9 @@ stages:
     serverlessDbCapacity: 1
     dbMinCapacity: 0.5
     maxSizeBytes: 10737418240
-    applicationGatewayCapacity: 1
+    applicationGatewayCapacity: 1 
 
-# 8
+# 9
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -242,6 +245,7 @@ stages:
     maxSizeBytes: 107374182400
     applicationGatewayCapacity: 2
 
+#10
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -267,6 +271,7 @@ stages:
     maxSizeBytes: 536870912000
     applicationGatewayCapacity: 2
 
+#11
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -307,6 +312,7 @@ stages:
     requestedServiceObjectiveName: P1
     resourceGroup: LargeStack-TEST 
     SqlDeploymentName: LargeStack
+    edition: Premium
     stackName: LargeSt
     version: w19d-14-2j
     imageReleaseState: $(imageReleaseState)
@@ -316,6 +322,10 @@ stages:
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
     applicationGatewayCapacity: 2
+    applicationGatewaySkuTier: WAF_v2
+    enableAutoscaling: true
+    autoScaleMinCapacity: 2
+    autoScaleMaxCapacity: 30
 
 - stage: ProductionStage
   displayName: Production Stage

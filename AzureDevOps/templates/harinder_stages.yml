@@ -45,7 +45,7 @@ parameters:
     default: none
   - name: databaseNewOrExisting
     type: string
-    default: new
+    default: ''
   - name: applicationGatewaySkuTier
     type: string
     default: Standard_v2
@@ -82,6 +82,16 @@ parameters:
   - name: gitBranch
     type: string
     default: support/scalable
+  - name: enableAutoscaling
+    type: boolean
+    default: true
+  - name: autoScaleMinCapacity
+    type: number
+    default: 1
+  - name: autoScaleMaxCapacity
+    type: number
+    default: 15
+
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -97,21 +107,35 @@ stages:
           value: 'Azure Baking Images'
         - name: location
           value: 'Australia East'
-        - name: additionalOverrideParameters
-          ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:
-            ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
-              ${{ if contains(lower(parameters.stageDisplayname), 'test') }}:
-                value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)" -keyVaultName "$(keyVaultName)" -keyVaultCertificateName "$(keyVaultCertificateName)" -keyVaultRGName "BakingDP"
-              ${{ else }}:
-                value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)"
-            ${{ else }}:
-              value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}"
-          ${{ else }}:
-            ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
-              value: -collation $(Collation_JPN)
-            ${{ else }}:
-              value: ''
+        # - name: additionalOverrideParameters
+        #   ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:
+        #     ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
+        #       ${{ if contains(lower(parameters.stageDisplayname), 'test') }}:
+        #         value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)" -keyVaultName "$(keyVaultName)" -keyVaultCertificateName "$(keyVaultCertificateName)" -keyVaultRGName "BakingDP"
+        #       ${{ else }}:
+        #         value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -collation "$(Collation_JPN)"
+        #     ${{ else }}:
+        #       value: -virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}"
+        #   ${{ else }}:
+        #     ${{ if endsWith(lower(parameters.stageDisplayname), 'j') }}: 
+        #       value: -collation $(Collation_JPN)
+        #     ${{ else }}:
+        #       value: ''
 
+        - name: additionalOverrideParameters
+          ${{ if eq(parameters.stageDisplayname, 'AUSDevShoe_WithKeyVaultCert_Sizesw19d150') }}: 
+            value: '-virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}"'
+          ${{ elseif eq(parameters.stageDisplayname, 'AUSTestShoe_WithKeyVaultCert_Sizesw16142j') }}:
+            value: '-virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -serverlessDbCapacity ${{ parameters.serverlessDbCapacity }} -dbMinCapacity "${{ parameters.dbMinCapacity }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity "${{ parameters.applicationGatewayCapacity }}" -keyVaultName "$(keyVaultName)" -keyVaultCertificateName "$(keyVaultCertificateName)" -keyVaultRGName "BakingDP" -collation $(Collation_JPN)'
+          ${{ elseif eq(parameters.stageDisplayname, 'AUSSmallStackShoeSizesw19d150j') }}:
+            value: '-virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -applicationGatewayCapacity ${{ parameters.applicationGatewayCapacity }} -collation $(Collation_JPN)'
+          ${{ elseif eq(parameters.stageDisplayname, 'AUSMediumStackShoeSizesw16d150j') }}:
+            value: '-virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -agpublicIPAllocationMethod "Static" -agpublicIpSku "Standard" -enableAutoscaling true -autoScaleMinCapacity 1 -autoScaleMaxCapacity 15 -collation $(Collation_JPN)'
+          ${{ elseif eq(parameters.stageDisplayname, 'AUSLargeStackShoeSizesw19d142j') }}:
+            value: '-virtualMachineSize "${{ parameters.virtualMachineSize }}" -dbVirtualMachineSize "${{ parameters.dbVirtualMachineSize }}" -keyVaultEnabled "${{ parameters.keyVaultEnabled }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -maxSizeBytes "${{ parameters.maxSizeBytes }}" -agpublicIPAllocationMethod "Static" -agpublicIpSku "Standard" -enableAutoscaling true -autoScaleMinCapacity 2 -autoScaleMaxCapacity 30 -collation $(Collation_JPN)'
+          ${{ else }}:
+            value: ''
+        
       cancelTimeoutInMinutes: 1
       condition: ${{ parameters.jobcondition}}
       displayName: ${{ parameters.jobDisplayname }}
