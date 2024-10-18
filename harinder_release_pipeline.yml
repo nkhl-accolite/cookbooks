@@ -185,6 +185,7 @@ stages:
     stackName: MSSQLVMSS
     version: w19d-14-2
 
+# 8
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
@@ -213,6 +214,7 @@ stages:
     maxSizeBytes: 10737418240
     applicationGatewayCapacity: 1
 
+# 8
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
     dependsOn: 
