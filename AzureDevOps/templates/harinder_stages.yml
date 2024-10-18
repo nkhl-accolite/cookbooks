@@ -45,7 +45,7 @@ parameters:
     default: none
   - name: databaseNewOrExisting
     type: string
-    default: none
+    default: new
   - name: applicationGatewaySkuTier
     type: string
     default: Standard_v2
@@ -93,7 +93,6 @@ stages:
         - name: ConnectedServiceName
           value: 'Azure Baking Images'
         - name: location
-          # value: 'Australia Southeast'
           value: 'Australia East'
         - name: additionalOverrideParameters
           ${{ if contains(lower(parameters.stageDisplayname), 'shoe') }}:

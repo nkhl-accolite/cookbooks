@@ -54,7 +54,7 @@ stages:
     stageDisplayname: AUS SQLAZURE2 DB w19d-14-2
     jobName: AUSSQLAZURE2DBw19d142
     jobDisplayname: AUS SQLAZURE2 DB w19d-14-2
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-14-2'], 'True'), eq(variables['Build-all'], 'True')))
     databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
@@ -74,7 +74,6 @@ stages:
     jobName: AUSSQLAZURE3DBw16d142
     jobDisplayname: AUS SQLAZURE3 DB w16d-14-2
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2'], 'true'), eq(variables['Build-all'], 'true')))
-    databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLv142)
     osName: Windows Server 2016
@@ -82,7 +81,7 @@ stages:
     resourceGroup: SQLAZURE3-TEST
     SqlDeploymentName: SQLAZURE3
     stackName: SQL3VMSS
-    version: w19d-14-2
+    version: w16d-14-2
 
 # #3
 - template: AzureDevOps\templates\harinder_stages.yml
