@@ -203,6 +203,10 @@ stages:
 
         - task: AzurePowerShell@5
           displayName: 'Test Image Version'
+          env:
+            RESOURCEGROUP: $(ResourceGroup)
+            COOKBOOKSSOURCE: $(Pipeline.Workspace)\cookbooks
+            COOKBOOKSBRANCH: debug/paas
           inputs:
             azureSubscription: $(ConnectedServiceName)
             ScriptPath: $(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1
