@@ -79,6 +79,9 @@ parameters:
   - name: applicationGatewayCapacity
     type: string
     default: ''
+  - name: gitBranch
+    type: string
+    default: support/scalable
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -172,7 +175,7 @@ stages:
             location: $(location)
             csmFile: $(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json
             deploymentName: ${{ parameters.SqlDeploymentName }}
-            overrideParameters: -osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)
+            overrideParameters: -osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseName "lansa" -databaseLogin "$(databaseLogin)" -databaseLoginPassword "$(databaseLoginPassword)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "${{ parameters.gitBranch }}" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" $(additionalOverrideParameters)
             deploymentOutputs: deploymentOutput
             addSpnToEnvironment: true
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
@@ -203,10 +206,6 @@ stages:
 
         - task: AzurePowerShell@5
           displayName: 'Test Image Version'
-          env:
-            RESOURCEGROUP: $(ResourceGroup)
-            COOKBOOKSSOURCE: $(Pipeline.Workspace)\cookbooks
-            COOKBOOKSBRANCH: debug/paas
           inputs:
             azureSubscription: $(ConnectedServiceName)
             ScriptPath: $(Pipeline.Workspace)/_robe070_cookbooks/scripts/azure_test_image_version.ps1

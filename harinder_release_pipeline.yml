@@ -91,18 +91,17 @@ stages:
     stageDisplayname: AUS SQLAZURE4 DB w19d-15-0
     jobName: AUSSQLAZURE4DBw19d150 
     jobDisplayname: AUS SQLAZURE4 DB w19d-15-0
-    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true'))) 
+    jobcondition: and(succeeded(), or(eq(variables['Build-w19d-15-0'], 'true'), eq(variables['Build-all'], 'true')))
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Medium
-    databaseNewOrExisting: new
     lansaVersion: V15 GA
     msiURL: $(msiURLv15)
-    osName: Windows Server 2019 
+    osName: Windows Server 2019
     requestedServiceObjectiveName: S12
     resourceGroup: SQLAZURE4-TEST 
     SqlDeploymentName: SQLAZURE4
     stackName: SQL4VMSS
-    version: w19d-15-0 
+    version: w19d-15-0
 
 # #4
 - template: AzureDevOps\templates\harinder_stages.yml
@@ -113,8 +112,8 @@ stages:
     jobName: AUSSQLAZURE5DBw16d150 
     jobDisplayname: AUS SQLAZURE5 DB w16d-15-0
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-15-0'], 'true'), eq(variables['Build-all'], 'true'))) 
-    databaseNewOrExisting: new
     lansaVersion: V15 GA
+    edition: Premium
     applicationGatewaySkuTier: WAF
     applicationGatewaySkuName: WAF_Large
     msiURL: $(msiURLv15)
