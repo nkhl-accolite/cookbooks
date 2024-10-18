@@ -214,6 +214,7 @@ stages:
           condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzureResourceManagerTemplateDeployment@3
+          displayName: Delete Resource Group
           inputs:
             deploymentScope: 'Resource Group'
             azureResourceManagerConnection: $(ConnectedServiceName)
