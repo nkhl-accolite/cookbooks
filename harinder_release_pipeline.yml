@@ -160,7 +160,6 @@ stages:
     databaseType: MYSQL
     msiURL: $(msiURLv15)
     osName: Windows Server 2019
-    requestedServiceObjectiveName: S12
     resourceGroup: mysql1Test
     SqlDeploymentName: mysql1Test
     stackName: MYSQLVMSS
@@ -184,7 +183,7 @@ stages:
     resourceGroup: mssqls1Test
     SqlDeploymentName: mssqls1Test
     stackName: MSSQLVMSS
-    version: w19d-15-0
+    version: w19d-14-2
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:

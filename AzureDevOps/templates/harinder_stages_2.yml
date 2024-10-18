@@ -69,13 +69,19 @@ parameters:
     default: none
   - name: databaseNewOrExisting
     type: string
-    default: none
+    default: new
   - name: applicationGatewaySkuTier
     type: string
     default: Standard_v2
   - name: applicationGatewaySkuName
     type: string
     default: Standard_v2
+  - name: imageReleaseState
+    type: string
+    default: Preview
+  - name: gitBranch
+    type: string
+    default: support/scalable
 
 stages:
   - stage: ${{ parameters.stageName }}
@@ -88,8 +94,6 @@ stages:
       variables:
         - name: ResourceGroup
           value: ${{ parameters.resourceGroup }}
-        - name: imageReleaseState
-          value: 'Production'
         - name: csmFile
           ${{ if eq( lower(parameters.stageName), 'ausmysql1dbw19d150' ) }}:
             value: mysqlTemplate.json
@@ -176,7 +180,7 @@ stages:
               $serverName = $deployment_Output.serverName.value
               Write-Host "##vso[task.setvariable variable=serverName;isOutput=true]$serverName" | Out-Default | Write-Verbose 
             displayName: 'Get MySQL DB ServerName'
-            name: mysqlDBOutput
+            name: msmysqlDBOutput
             condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
           - task: AzureResourceManagerTemplateDeployment@3
@@ -187,7 +191,7 @@ stages:
               resourceGroupName: '$(ResourceGroup)'
               location: $(location)
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
-              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(mysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
+              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "MYSQLVMSS" -applicationGatewaySkuTier "${{ parameters.applicationGatewaySkuTier }}" -applicationGatewaySkuName "${{ parameters.applicationGatewaySkuName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(msmysqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa@$(msmysqlDBOutput.serverName)" -databaseLoginPassword "$(databaseLoginPassword)" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "${{ parameters.gitBranch }}" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static"'
               deploymentName: MYSQL
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
@@ -196,7 +200,7 @@ stages:
         - ${{ if eq( lower(parameters.stageName), 'ausmssqls1dbw19d142') }}:
           - task: AzurePowerShell@5
             displayName: 'Azure PowerShell script: GetServerIP'
-            name: sqlDBOutput
+            name: mssqlDBOutput
             inputs:
               azureSubscription: $(ConnectedServiceName)
               ScriptType: InlineScript
@@ -219,7 +223,7 @@ stages:
               resourceGroupName: '$(ResourceGroup)'
               location: $(location)
               csmFile: '$(Pipeline.Workspace)/_TemplatesCI/Solution Template/mainTemplate.json'
-              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "Preview" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(sqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -agpublicIpDns "lansaag"'
+              overrideParameters: '-osName "$(Gate.osName)" -lansaVersion "${{ parameters.lansaVersion }}" -imageReleaseState "${{ parameters.imageReleaseState }}" -msiURL "${{ parameters.msiURL }}" -stackName "${{ parameters.stackName }}" -certificateBase64Encoded "$(certificateBase64Encoded)" -certificatePassword "$(certificatePassword)" -databaseNewOrExisting "${{ parameters.databaseNewOrExisting }}" -databaseType "${{ parameters.databaseType }}" -databaseServerName "$(mssqlDBOutput.serverName)" -databaseName "lansa" -databaseLogin "lansa" -databaseLoginPassword "$(databaseLoginPassword)" -adminUsername "$(adminUsername)" -edition "${{ parameters.edition }}" -requestedServiceObjectiveName "${{ parameters.requestedServiceObjectiveName }}" -adminUsername "$(adminUsername)" -adminPassword "$(adminPassword)" -webUsername "$(webUsername)" -webPassword "$(webPassword)" -gitBranch "support/scalable" -agpublicIpSku "Standard" -agpublicIpAllocationMethod "Static" -agpublicIpDns "lansaag"'
               deploymentName: MSSQLS
               deploymentOutputs: deploymentOutput
               addSpnToEnvironment: true
