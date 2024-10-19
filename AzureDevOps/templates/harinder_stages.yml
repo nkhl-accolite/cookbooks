@@ -39,7 +39,6 @@ parameters:
     default: none
   - name: requestedServiceObjectiveName  
     type: string
-    default: ''
   - name: msiURL  
     type: string
     default: none
