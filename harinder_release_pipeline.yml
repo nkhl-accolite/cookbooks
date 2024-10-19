@@ -225,11 +225,9 @@ stages:
     jobName: AUSTestShoe_WithKeyVaultCert_Sizesw16142j
     jobDisplayname: AUS Test Shoe (With Key Vault Cert) Sizes w16-14-2j
     jobcondition: and(succeeded(), or(eq(variables['Build-w16d-14-2j'], 'true'), eq(variables['Build-all'], 'true')))
-    databaseNewOrExisting: new
     lansaVersion: V14 SP2
     msiURL: $(msiURLJPN)
     osName: Windows Server 2016 JPN 
-    requestedServiceObjectiveName: S2
     resourceGroup: TestStack-TEST 
     SqlDeploymentName: TestStack
     stackName: TestSt
@@ -240,7 +238,7 @@ stages:
     keyVaultEnabled: 'true'
     edition: Serverless
     serverlessDbCapacity: 4
-    dbMinCapacity: '0.5'
+    dbMinCapacity: 0.5
     maxSizeBytes: '107374182400'
 
 #10
