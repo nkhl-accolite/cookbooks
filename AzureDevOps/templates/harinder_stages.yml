@@ -39,6 +39,7 @@ parameters:
     default: none
   - name: requestedServiceObjectiveName  
     type: string
+    default: S2
   - name: msiURL  
     type: string
     default: none
