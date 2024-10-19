@@ -99,7 +99,7 @@ parameters:
     default: Standard
   - name: agpublicIpAllocationMethod
     type: string
-    defaul: "Static"
+    default: "Static"
 
 
 stages:
