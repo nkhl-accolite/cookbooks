@@ -213,9 +213,9 @@ stages:
     dbVirtualMachineSize: Standard_B2ms
     edition: Serverless
     serverlessDbCapacity: 1
-    dbMinCapacity: 0.5
-    maxSizeBytes: 10737418240
-    applicationGatewayCapacity: 1 
+    dbMinCapacity: '0.5'
+    maxSizeBytes: '10737418240'
+    applicationGatewayCapacity: 1
 
 # 9
 - template: AzureDevOps\templates\harinder_stages.yml

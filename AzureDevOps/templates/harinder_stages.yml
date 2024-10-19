@@ -68,8 +68,8 @@ parameters:
     type: string
     default: Standard
   - name: serverlessDbCapacity
-    type: string
-    default: ''
+    type: number
+    default: 0
   - name: dbMinCapacity
     type: string
     default: ''
@@ -77,8 +77,8 @@ parameters:
     type: string
     default: ''
   - name: applicationGatewayCapacity
-    type: string
-    default: ''
+    type: number
+    default: 0
   - name: gitBranch
     type: string
     default: support/scalable
