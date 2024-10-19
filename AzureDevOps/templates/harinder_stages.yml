@@ -176,18 +176,18 @@ stages:
             displayName: 'Download from Azure Quick Start Template'
             condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
-        - task: AzurePowerShell@5
-          displayName: 'Delete Resource Group'
-          inputs:
-            azureSubscription: $(ConnectedServiceName)
-            ScriptType: InlineScript
-            Inline: |
-              Write-Host "Deleting Resource Group $(ResourceGroup)"
-              Remove-AzResourceGroup -Name $(ResourceGroup) -Force -ErrorAction SilentlyContinue
-            errorActionPreference: silentlyContinue
-            azurePowerShellVersion: LatestVersion
-          continueOnError: true
-          condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
+        # - task: AzurePowerShell@5
+        #   displayName: 'Delete Resource Group'
+        #   inputs:
+        #     azureSubscription: $(ConnectedServiceName)
+        #     ScriptType: InlineScript
+        #     Inline: |
+        #       Write-Host "Deleting Resource Group $(ResourceGroup)"
+        #       Remove-AzResourceGroup -Name $(ResourceGroup) -Force -ErrorAction SilentlyContinue
+        #     errorActionPreference: silentlyContinue
+        #     azurePowerShellVersion: LatestVersion
+        #   continueOnError: true
+        #   condition: and(succeeded(), eq(lower(variables['Gate.IsEnabled']), 'true'))
 
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'ARM Template deployment: ${{ parameters.stageDisplayname }}'
