@@ -144,7 +144,7 @@ stages:
         vmImage: ${{ parameters.vmImage }}
 
       steps:
-        - pwsh: Write-Host $(additionalOverrideParameters)
+        - pwsh: Write-Host "additionalOverrideParameters = $(additionalOverrideParameters)"
         # - download: _TemplatesCI
         #   displayName: Download artefacts from Template CI 3.0
         # - download: _BuildImageReleaseArtefacts
