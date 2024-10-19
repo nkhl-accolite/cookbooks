@@ -69,7 +69,7 @@ parameters:
     default: Standard
   - name: serverlessDbCapacity
     type: number
-    default: 0
+    default: 1
   - name: dbMinCapacity
     type: string
     default: ''
@@ -78,7 +78,7 @@ parameters:
     default: ''
   - name: applicationGatewayCapacity
     type: number
-    default: 0
+    default: 2
   - name: gitBranch
     type: string
     default: support/scalable
@@ -86,11 +86,11 @@ parameters:
     type: boolean
     default: true
   - name: autoScaleMinCapacity
-    type: string
-    default: '1'
+    type: number
+    default: 0
   - name: autoScaleMaxCapacity
-    type: string
-    default: '15'
+    type: number
+    default: 10
 
 
 stages:

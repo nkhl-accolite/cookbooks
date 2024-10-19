@@ -212,9 +212,8 @@ stages:
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
     edition: Serverless
-    serverlessDbCapacity: 1
-    dbMinCapacity: '0.5'
-    maxSizeBytes: '10737418240'
+    dbMinCapacity: 0.5
+    maxSizeBytes: 10737418240
     applicationGatewayCapacity: 1
 
 # 9
@@ -241,9 +240,8 @@ stages:
     keyVaultEnabled: 'true'
     edition: Serverless
     serverlessDbCapacity: 4
-    dbMinCapacity: 0.5
-    maxSizeBytes: 107374182400
-    applicationGatewayCapacity: 2
+    dbMinCapacity: '0.5'
+    maxSizeBytes: '107374182400'
 
 #10
 - template: AzureDevOps\templates\harinder_stages.yml
@@ -266,10 +264,7 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B4ms
     dbVirtualMachineSize: Standard_B2ms
-    serverlessDbCapacity: 1
-    dbMinCapacity: 0
     maxSizeBytes: 536870912000
-    applicationGatewayCapacity: 2
 
 #11
 - template: AzureDevOps\templates\harinder_stages.yml
@@ -292,10 +287,8 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B12ms
     dbVirtualMachineSize: Standard_B2ms
-    serverlessDbCapacity: 1
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
-    applicationGatewayCapacity: 2
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
@@ -318,7 +311,6 @@ stages:
     imageReleaseState: $(imageReleaseState)
     virtualMachineSize: Standard_B20ms
     dbVirtualMachineSize: Standard_B2ms
-    serverlessDbCapacity: 1
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
     applicationGatewayCapacity: 2
