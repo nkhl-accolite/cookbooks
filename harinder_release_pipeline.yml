@@ -287,6 +287,8 @@ stages:
     dbVirtualMachineSize: Standard_B2ms
     dbMinCapacity: 0
     maxSizeBytes: 1099511627776
+    autoScaleMinCapacity: 1
+    autoScaleMaxCapacity: 15
 
 - template: AzureDevOps\templates\harinder_stages.yml
   parameters:
