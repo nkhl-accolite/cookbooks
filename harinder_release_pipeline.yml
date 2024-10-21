@@ -3,7 +3,8 @@ trigger: none
 resources:
   pipelines:
     - pipeline: _TemplatesCI
-      source: Template CI 3.0
+      # source: Template CI 3.0 
+      source: Template CI 3.0 - Harinder
     - pipeline: _BuildImageReleaseArtefacts
       source: Build Image Release Artefacts 3.0
   repositories:
